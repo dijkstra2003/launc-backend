@@ -14,3 +14,16 @@ install:
 script:
     - dotnet test
 
+jobs:
+  include:
+    - stage: test
+      script:
+        - dotnet test
+
+    - stage: build latest
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t launc .
+        - docker images
+        - docker tag launc:latest $DOCKER_USERNAME/launc-backend
+        - docker push $DOCKER_USERNAME/launc-backend
