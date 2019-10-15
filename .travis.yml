@@ -1,0 +1,16 @@
+language: csharp
+solution: API.sln
+os: linux
+
+# Use the latest travis-ci image
+group: travis_latest
+
+mono: none
+dotnet: 3.0
+
+install:
+    dotnet restore src/API.Web/API.Web.csproj
+
+script:
+    - dotnet test
+

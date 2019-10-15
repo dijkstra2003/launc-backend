@@ -10,4 +10,7 @@ To run the application tests go to the root folder and run the following command
 ```
 dotnet test
 ```
-
+To build the docker image run
+```
+docker build . -t launc
+```
