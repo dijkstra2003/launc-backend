@@ -21,22 +21,13 @@ script:
 
 deploy:
   - provider: script
-    script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t launc .
-    - docker images
-    - docker tag launc:latest $DOCKER_USERNAME/launc-backend
-    - docker push $DOCKER_USERNAME/launc-backend
+    skip_cleanup: true
+    script: bash scripts/deploy.sh latest
     on:
       branch: master
 
   - provider: script
-    script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t launc .
-    - docker images
-    - docker tag launc:release $DOCKER_USERNAME/launc-backend
-    - docker push $DOCKER_USERNAME/launc-backend
+    skip_cleanup: true
+    script: bash scripts/deploy.sh release
     on:
       branch: release
-
