@@ -2,38 +2,41 @@ language: csharp
 solution: API.sln
 os: linux
 
-# Use the latest travis-ci image
 group: travis_latest
 
 mono: none
 dotnet: 3.0
 
+branches:
+  only:
+  - master
+  - release
+  - dev
+
 install:
     dotnet restore src/API.Web/API.Web.csproj
 
 script:
-    - dotnet test
+  - dotnet test
 
-jobs:
-  include:
-    - stage: test
-      script:
-        - dotnet test
+deploy:
+  - provider: script
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t launc .
+    - docker images
+    - docker tag launc:latest $DOCKER_USERNAME/launc-backend
+    - docker push $DOCKER_USERNAME/launc-backend
+    on:
+      branch: master
 
-    - stage: build latest
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -t launc .
-        - docker images
-        - docker tag launc:latest $DOCKER_USERNAME/launc-backend
-        - docker push $DOCKER_USERNAME/launc-backend
-      if: branch = master
+  - provider: script
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t launc .
+    - docker images
+    - docker tag launc:release $DOCKER_USERNAME/launc-backend
+    - docker push $DOCKER_USERNAME/launc-backend
+    on:
+      branch: release
 
-    - stage: build release
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -t launc .
-        - docker images
-        - docker tag launc:release $DOCKER_USERNAME/launc-backend
-        - docker push $DOCKER_USERNAME/launc-backend
-      if: branch = release
