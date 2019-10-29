@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace API.Web
 {
@@ -20,7 +15,13 @@ namespace API.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(serverOptions => {
+                        serverOptions.Limits.MaxConcurrentConnections = 500;
+                        serverOptions.Limits.MaxConcurrentUpgradedConnections = 250;
+                        serverOptions.Listen(IPAddress.Loopback, 5000);
+                        serverOptions.Listen(IPAddress.Loopback, 5001);
+                    })
+                    .UseStartup<Startup>();
                 });
     }
 }
