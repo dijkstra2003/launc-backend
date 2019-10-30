@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using API.Web.Services;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace API.Web.Controllers
 {
@@ -13,6 +14,12 @@ namespace API.Web.Controllers
         public ValuesController(IValueService valueService)
         {
             this.valueService = valueService;
+        }
+
+        [HttpGet()]
+        public ActionResult<IEnumerable<int>> Index()
+        {
+            return new int[] {1, 2, 3, 4};
         }
         
         [HttpGet("{id}")]

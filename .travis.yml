@@ -31,7 +31,8 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: bash scripts/deploy.sh latest
+    script: bash scripts/deploy.sh latest && \
+            ssh launc@launc.space "docker stack deploy --compose-file prod/docker-compose.yml --with-registry-auth launc"
     on:
       branch: master
   - provider: script
