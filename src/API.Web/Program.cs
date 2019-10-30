@@ -18,8 +18,6 @@ namespace API.Web
                     webBuilder.UseKestrel(serverOptions => {
                         serverOptions.Limits.MaxConcurrentConnections = 500;
                         serverOptions.Limits.MaxConcurrentUpgradedConnections = 250;
-                        serverOptions.Listen(IPAddress.Any, 5000);
-                        serverOptions.Listen(IPAddress.Any, 5001);
                     })
                     .UseStartup<Startup>();
                 });
