@@ -20,7 +20,9 @@ script:
   - dotnet test
 
 addons:
-  ssh_known_hosts: launc.space
+  ssh_known_hosts:
+  - launc.space
+  - dev.launc.space
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_eab098d70a4e_key -iv $encrypted_eab098d70a4e_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
