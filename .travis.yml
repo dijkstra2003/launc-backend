@@ -39,6 +39,7 @@ deploy:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: bash scripts/deploy.sh release
+    script: bash scripts/deploy.sh release \
+            && ssh -t launc@launc.space "bash docker/deploy_prod.sh"
     on:
       branch: release
