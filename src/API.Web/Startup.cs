@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using API.Web.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Web
 {
@@ -23,6 +24,8 @@ namespace API.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //options.UseNpgsql(Configuration.GetConnectionString("PostContext")));
 
             services.AddSingleton<IValueService, ValueService>();
         }
