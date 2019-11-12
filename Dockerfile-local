@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0
+
+WORKDIR /app
+
+# Copy csproj and restore as distinct layers
+COPY ./*.sln ./
+COPY ./src/API.Web/API.Web.csproj ./API.Web.csproj
+RUN dotnet restore API.Web.csproj
+
+COPY . ./
+
+EXPOSE 5000
+
+ENTRYPOINT dotnet run watch --project src/API.Web --urls "http://0.0.0.0:5000;http://[::]:5000"
