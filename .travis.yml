@@ -33,7 +33,7 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: bash scripts/deploy.sh latest \
+    script: bash scripts/deploy.sh accept \
             && ssh -t launc@dev.launc.space "bash docker/deploy_accept.sh"
     on:
       branch: master
