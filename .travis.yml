@@ -17,6 +17,9 @@ install:
   - dotnet restore src/API.Web/API.Web.csproj
   - dotnet tool install --global dotnet-sonarscanner
 
+before_script:
+  - export PATH=$PATH:/home/travis/.dotnet/tools
+
 script:
   - dotnet test
   - dotnet-sonarscanner /k:launc-backend /d:sonar.host.url=dev.launc.space:9000 \
