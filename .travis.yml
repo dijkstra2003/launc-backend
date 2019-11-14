@@ -23,8 +23,8 @@ before_script:
 script:
   - dotnet test
   - dotnet build-server shutdown
-  - dotnet-sonarscanner begin /k:launc-backend /d:sonar.host.url=http://dev.launc.space:9000 \
-    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml \
+  - dotnet-sonarscanner begin /k:launc-backend /d:sonar.host.url=http://dev.launc.space:9000 
+    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml 
     /d:sonar.coverage.exclusions=”**Test*.cs”
   - dotnet build
   - dotnet-sonarscanner end
