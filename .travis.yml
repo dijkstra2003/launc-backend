@@ -19,8 +19,8 @@ install:
 
 script:
   - dotnet test
-  - dotnet sonarscanner /k:launc-backend /d:sonar.host.url=dev.launc.space:9000 
-    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml 
+  - dotnet-sonarscanner /k:launc-backend /d:sonar.host.url=dev.launc.space:9000 \
+    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml \
     /d:sonar.coverage.exclusions=”**Test*.cs”
 
 addons:
