@@ -14,7 +14,7 @@ branches:
   - dev
 
 install:
-    dotnet restore src/API.Web/API.Web.csproj && \
+    dotnet restore src/API.Web/API.Web.csproj &&
     dotnet tool install --global dotnet sonarscanner
 
 script:
