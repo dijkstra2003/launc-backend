@@ -10,6 +10,6 @@ namespace API.Web.Services
 
     public class ValueService : IValueService
     {
-        public int FetchValue(int value) => value;
+        public int FetchValue(int value) => value + 1337;
     }
 }
