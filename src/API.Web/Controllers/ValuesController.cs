@@ -9,7 +9,7 @@ namespace API.Web.Controllers
     [ApiController]
     public class ValuesController
     {
-        private IValueService valueService;
+        private readonly IValueService valueService;
 
         public ValuesController(IValueService valueService)
         {
@@ -25,7 +25,7 @@ namespace API.Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<int> Get(int id)
         {
-            return id;
+            return this.valueService.FetchValue(id);
         }
     }
 }
