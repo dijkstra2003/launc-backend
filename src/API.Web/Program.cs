@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace API.Web
 {
-    public static class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
