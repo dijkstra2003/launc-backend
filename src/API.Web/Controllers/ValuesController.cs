@@ -19,7 +19,7 @@ namespace API.Web.Controllers
         [HttpGet()]
         public ActionResult<IEnumerable<int>> Index()
         {
-            return new int[] {1, 2, 3, 4};
+            return new int[] {1, 2, 3, 4, 5};
         }
         
         [HttpGet("{id}")]
