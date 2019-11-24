@@ -15,11 +15,11 @@ namespace API.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseKestrel(serverOptions => {
-                        serverOptions.Limits.MaxConcurrentConnections = 500;
-                        serverOptions.Limits.MaxConcurrentUpgradedConnections = 250;
-                    })
-                    .UseStartup<Startup>();
+                    //webBuilder.UseKestrel(serverOptions => {
+                    //    serverOptions.Limits.MaxConcurrentConnections = 500;
+                    //    serverOptions.Limits.MaxConcurrentUpgradedConnections = 250;
+                    //})
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
