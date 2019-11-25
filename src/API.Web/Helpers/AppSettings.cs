@@ -1,4 +1,4 @@
-namespace WebApi.Helpers
+namespace API.Web.Helpers
 {
     public class AppSettings
     {

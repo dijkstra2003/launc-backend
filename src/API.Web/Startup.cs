@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Helpers;
-using WebApi.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AutoMapper;
+using API.Web.Services;
+using API.Web.Helpers;
+using Microsoft.Extensions.Hosting;
 
 namespace API.Web
 {
@@ -25,11 +27,13 @@ namespace API.Web
             services.AddCors();
             services.AddControllers();
 
-            // configure strongly typed settings objects
+            services.AddAutoMapper(typeof(Startup));
+
+            // Configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
+            // Configure JWT authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
@@ -50,13 +54,20 @@ namespace API.Web
                 };
             });
 
-            // configure DI for application services
+            // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IValueService, ValueService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseStatusCodePages();
             app.UseRouting();
 
             // global cors policy

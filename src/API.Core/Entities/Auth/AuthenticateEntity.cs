@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Models
+namespace API.Core.Entities.Auth
 {
-    public class AuthenticateModel
+    public class AuthenticateEntity
     {
         [Required]
         public string Username { get; set; }
