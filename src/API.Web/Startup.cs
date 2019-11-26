@@ -9,6 +9,8 @@ using AutoMapper;
 using API.Web.Services;
 using API.Web.Helpers;
 using Microsoft.Extensions.Hosting;
+using API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Web
 {
@@ -57,6 +59,11 @@ namespace API.Web
             // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IValueService, ValueService>();
+
+            services.AddDbContext<DataContext>(options => {
+                string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                options.UseNpgsql(Environment.EnvironmentValueOrDefault("LAUNC_DEFAULT_CONNECTION_STRING", defaultConnectionString));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

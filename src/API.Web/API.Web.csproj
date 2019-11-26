@@ -6,8 +6,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0"/>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0"/>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0"/>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.1"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\API.Core\API.Core.csproj"/>
+    <ProjectReference Include="..\API.Infrastructure\API.Infrastructure.csproj"/>
   </ItemGroup>
 </Project>
