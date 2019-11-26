@@ -17,5 +17,7 @@ COPY --from=build-env /app/out .
 
 EXPOSE 80
 
+ENV LAUNC_DEFAULT_CONNECTION_STRING
+
 # Run the runtime
 ENTRYPOINT ["dotnet", "API.Web.dll"]
