@@ -62,7 +62,12 @@ namespace API.Web
 
             services.AddDbContext<DataContext>(options => {
                 string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                options.UseNpgsql(Environment.EnvironmentValueOrDefault("LAUNC_DEFAULT_CONNECTION_STRING", defaultConnectionString));
+                options.UseNpgsql(
+                    Environment.EnvironmentValueOrDefault(
+                        Environment.EnvVariable.DefaultConnectionString, 
+                        defaultConnectionString
+                    )
+                );
             });
         }
 
