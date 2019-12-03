@@ -19,4 +19,4 @@ ENV LAUNC_DEFAULT_CONNECTION_STRING ""
 
 RUN chmod +x ./scripts/wait-for-it.sh
 RUN chmod +x ./scripts/local-entrypoint.sh
-ENTRYPOINT ./scripts/wait-for-it $LAUNC_DB_HOST:5432 -- ./scripts/entrypoint.sh
+ENTRYPOINT ./scripts/wait-for-it.sh $LAUNC_DB_HOST:5432 -- ./scripts/entrypoint.sh
