@@ -44,12 +44,12 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: bash scripts/deploy.sh accept \
-            && ssh -t launc@dev.launc.space "bash docker/deploy_accept.sh"
+            && ssh -t launc@dev.launc.space "source ~/.bashrc; bash docker/deploy_accept.sh"
     on:
       branch: master
   - provider: script
     skip_cleanup: true
     script: bash scripts/deploy.sh release \
-            && ssh -t launc@launc.space "bash docker/deploy_prod.sh"
+            && ssh -t launc@launc.space "source ~/.bashrc; bash docker/deploy_prod.sh"
     on:
       branch: release
