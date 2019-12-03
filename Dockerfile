@@ -10,7 +10,7 @@ RUN dotnet restore ./src/API.Web/API.Web.csproj
 # Install the Dotnet entity framework so we can run migrations
 RUN dotnet tool install --global dotnet-ef --version 3.0.0
 
-EXPOSE 80
+EXPOSE 5000
 
 RUN dotnet publish -c Release -o out ./src/API.Web/API.Web.csproj
 

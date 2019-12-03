@@ -37,8 +37,6 @@ namespace API.Web
 
             // Configure JWT authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
-            System.Console.WriteLine("Application secret:" + appSettings.Secret);
-
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
             {
