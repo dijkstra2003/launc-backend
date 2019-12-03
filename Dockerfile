@@ -1,23 +1,22 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build-env
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY ./*.sln ./
-COPY ./src/API.Web/API.Web.csproj ./API.Web.csproj
-RUN dotnet restore API.Web.csproj
+ENV PATH="${PATH}:/root/.dotnet/tools"
 
-# Copy everything else and build
+# Copy everything and restore
 COPY . ./
-RUN dotnet publish -c Release -o out ./src/API.Web/API.Web.csproj
+RUN dotnet restore ./src/API.Web/API.Web.csproj
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
-WORKDIR /app
-COPY --from=build-env /app/out .
+# Install the Dotnet entity framework so we can run migrations
+RUN dotnet tool install --global dotnet-ef --version 3.0.0
 
 EXPOSE 80
 
+RUN dotnet publish -c Release -o out ./src/API.Web/API.Web.csproj
+
+ENV LAUNC_DB_HOST "localhost"
 ENV LAUNC_DEFAULT_CONNECTION_STRING ""
 
-# Run the runtime
-ENTRYPOINT ["dotnet", "API.Web.dll"]
+RUN chmod +x ./scripts/wait-for-it.sh
+RUN chmod +x ./scripts/local-entrypoint.sh
+ENTRYPOINT ./scripts/wait-for-it $LAUNC_DB_HOST:5432 -- ./scripts/entrypoint.sh
