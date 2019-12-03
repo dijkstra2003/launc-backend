@@ -7,6 +7,8 @@ using API.Core.Dtos;
 using System.Collections.Generic;
 using API.Core.Entities;
 using System.Linq;
+using API.Infrastructure.Entities;
+using User = API.Core.Entities.User;
 
 namespace WebApi.Controllers
 {

@@ -5,9 +5,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using API.Core.Entities;
+using API.Infrastructure.Entities;
 using API.Web.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using User = API.Core.Entities.User;
 
 namespace API.Web.Services
 {

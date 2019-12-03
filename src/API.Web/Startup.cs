@@ -11,6 +11,7 @@ using API.Web.Helpers;
 using Microsoft.Extensions.Hosting;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using API.Infrastructure.Entities;
 
 namespace API.Web
 {
@@ -68,6 +69,10 @@ namespace API.Web
                         defaultConnectionString
                     )
                 );
+            });
+            services.AddDbContext<launcspaceContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
         }
 
