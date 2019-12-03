@@ -8,6 +8,13 @@ RUN dotnet restore API.Web.csproj
 
 COPY . ./
 
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+# Install the Dotnet entity framework so we can run migrations
+RUN dotnet tool install --global dotnet-ef --version 3.0.0
+
 EXPOSE 5000
 
-ENTRYPOINT dotnet run watch --project src/API.Web --urls "http://0.0.0.0:5000;http://[::]:5000"
+RUN chmod +x ./scripts/wait-for-it.sh
+RUN chmod +x ./scripts/local-entrypoint.sh
+ENTRYPOINT ./scripts/wait-for-it.sh database:5432 -- ./scripts/local-entrypoint.sh
