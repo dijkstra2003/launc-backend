@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace API.Web.Services
 {
     public interface IValueService
@@ -10,6 +7,6 @@ namespace API.Web.Services
 
     public class ValueService : IValueService
     {
-        public int FetchValue(int value) => value + 1337;
+        public int FetchValue(int value) => value;
     }
 }
