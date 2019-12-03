@@ -97,12 +97,6 @@ namespace API.Web
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
-
-            // Migrate the database
-            using (var serviceScope = app.ApplicationServices.CreateScope()) {
-                var context = serviceScope.ServiceProvider.GetService<DataContext>();
-                context.Database.Migrate();
-            }
         }
     }
 }
