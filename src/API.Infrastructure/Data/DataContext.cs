@@ -1,3 +1,4 @@
+using API.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Infrastructure.Data
@@ -7,5 +8,7 @@ namespace API.Infrastructure.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
+
+        public DbSet<User> Users { get; set; }
     }
 }

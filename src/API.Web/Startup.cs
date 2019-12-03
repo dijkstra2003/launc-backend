@@ -58,9 +58,11 @@ namespace API.Web
 
             // Configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserJwtService, UserJwtService>();
             services.AddScoped<IValueService, ValueService>();
 
             services.AddDbContext<DataContext>(options => {
+                
                 string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseNpgsql(
                     Environment.EnvironmentValueOrDefault(
@@ -83,10 +85,11 @@ namespace API.Web
             app.UseRouting();
 
             // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
+            app.UseCors(x => 
+                x.AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+            );
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -94,6 +97,12 @@ namespace API.Web
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+
+            // Migrate the database
+            using (var serviceScope = app.ApplicationServices.CreateScope()) {
+                var context = serviceScope.ServiceProvider.GetService<DataContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }
