@@ -9,7 +9,6 @@ namespace API.Infrastructure.Entities
         {
             CampaignGoal = new HashSet<CampaignGoal>();
             GoalSubGoal = new HashSet<GoalSubGoal>();
-            ProductGoal = new HashSet<ProductGoal>();
         }
 
         public int Id { get; set; }
@@ -21,6 +20,5 @@ namespace API.Infrastructure.Entities
 
         public virtual ICollection<CampaignGoal> CampaignGoal { get; set; }
         public virtual ICollection<GoalSubGoal> GoalSubGoal { get; set; }
-        public virtual ICollection<ProductGoal> ProductGoal { get; set; }
     }
 }
