@@ -3,15 +3,17 @@ using System;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace API.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191210123409_ProductRemoval")]
+    partial class ProductRemoval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,31 @@ namespace API.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("API.Core.Entities.Campaign", b =>
+            modelBuilder.Entity("API.Core.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("API.Infrastructure.Entities.Campaign", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,6 +58,12 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<string>("CampaignName")
                         .HasColumnType("text");
 
+                    b.Property<int?>("CampaignType")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CampaignTypeNavigationId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
@@ -40,10 +72,12 @@ namespace API.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CampaignTypeNavigationId");
+
                     b.ToTable("Campaign");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.CampaignGoal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.CampaignGoal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +108,28 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("CampaignsGoal");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.Comment", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.CampaignType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("TypeDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CampaignType");
+                });
+
+            modelBuilder.Entity("API.Infrastructure.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +150,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("Comment");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.Goal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.Goal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,7 +177,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("Goal");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.GoalSubGoal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.GoalSubGoal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +208,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("GoalSubGoal");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.SubGoal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.SubGoal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,7 +235,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("Subgoal");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.Team", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,7 +259,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.TeamCampaign", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.TeamCampaign", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,31 +290,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("TeamCampaign");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("API.Core.Entities.UserCampaign", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserCampaign", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -290,7 +321,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("UserCampaign");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserComment", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -321,7 +352,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("UserComment");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserLikes", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserLikes", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -352,7 +383,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("UserLikes");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserTeam", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserTeam", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -383,42 +414,49 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("UserTeam");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.CampaignGoal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.Campaign", b =>
                 {
-                    b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.CampaignType", "CampaignTypeNavigation")
+                        .WithMany("Campaign")
+                        .HasForeignKey("CampaignTypeNavigationId");
+                });
+
+            modelBuilder.Entity("API.Infrastructure.Entities.CampaignGoal", b =>
+                {
+                    b.HasOne("API.Infrastructure.Entities.Campaign", "CampaignFkNavigation")
                         .WithMany("CampaignGoal")
                         .HasForeignKey("CampaignFkNavigationId");
 
-                    b.HasOne("API.Core.Entities.Goal", "GoalFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Goal", "GoalFkNavigation")
                         .WithMany("CampaignGoal")
                         .HasForeignKey("GoalFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.GoalSubGoal", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.GoalSubGoal", b =>
                 {
-                    b.HasOne("API.Core.Entities.Goal", "GoalFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Goal", "GoalFkNavigation")
                         .WithMany("GoalSubGoal")
                         .HasForeignKey("GoalFkNavigationId");
 
-                    b.HasOne("API.Core.Entities.SubGoal", "SubGoalFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.SubGoal", "SubGoalFkNavigation")
                         .WithMany("GoalSubGoal")
                         .HasForeignKey("SubGoalFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.TeamCampaign", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.TeamCampaign", b =>
                 {
-                    b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Campaign", "CampaignFkNavigation")
                         .WithMany("TeamCampaign")
                         .HasForeignKey("CampaignFkNavigationId");
 
-                    b.HasOne("API.Core.Entities.Team", "TeamFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Team", "TeamFkNavigation")
                         .WithMany("TeamCampaign")
                         .HasForeignKey("TeamFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserCampaign", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserCampaign", b =>
                 {
-                    b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Campaign", "CampaignFkNavigation")
                         .WithMany("UserCampaign")
                         .HasForeignKey("CampaignFkNavigationId");
 
@@ -427,9 +465,9 @@ namespace API.Infrastructure.Data.Migrations
                         .HasForeignKey("UserFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserComment", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserComment", b =>
                 {
-                    b.HasOne("API.Core.Entities.Comment", "CommentFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Comment", "CommentFkNavigation")
                         .WithMany("UserComment")
                         .HasForeignKey("CommentFkNavigationId");
 
@@ -438,9 +476,9 @@ namespace API.Infrastructure.Data.Migrations
                         .HasForeignKey("UserFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserLikes", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserLikes", b =>
                 {
-                    b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Campaign", "CampaignFkNavigation")
                         .WithMany("UserLikes")
                         .HasForeignKey("CampaignFkNavigationId");
 
@@ -449,9 +487,9 @@ namespace API.Infrastructure.Data.Migrations
                         .HasForeignKey("UserFkNavigationId");
                 });
 
-            modelBuilder.Entity("API.Core.Entities.UserTeam", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.UserTeam", b =>
                 {
-                    b.HasOne("API.Core.Entities.Team", "TeamFkNavigation")
+                    b.HasOne("API.Infrastructure.Entities.Team", "TeamFkNavigation")
                         .WithMany("UserTeam")
                         .HasForeignKey("TeamFkNavigationId");
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Infrastructure.Entities
+namespace API.Core.Entities
 {
     public partial class Goal
     {

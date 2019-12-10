@@ -1,5 +1,4 @@
 using API.Core.Entities;
-using API.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Infrastructure.Data
@@ -13,7 +12,6 @@ namespace API.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Campaign> Campaign { get; set; }
         public DbSet<CampaignGoal> CampaignsGoal { get; set; }
-        public DbSet<CampaignType> CampaignType { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Goal> Goal { get; set; }
         public DbSet<GoalSubGoal> GoalSubGoal { get; set; }
