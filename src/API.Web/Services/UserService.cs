@@ -12,11 +12,11 @@ namespace API.Web.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
-        Task<EntityEntry<User>> RegisterAsync(string username, string password, string firstname, string lastname);
+        User Authenticate(string email, string password);
+        Task<EntityEntry<User>> RegisterAsync(string email, string password, string name);
         List<User> GetAll();
         Task<List<User>> GetAllAsync();
-        bool UsernameIsUnique(string username);
+        bool EmailIsUnique(string email);
     }
 
     public class UserService : IUserService
@@ -32,9 +32,9 @@ namespace API.Web.Services
             _appSettings = appSettings.Value;
         }
 
-        public User Authenticate(string username, string password)
+        public User Authenticate(string email, string password)
         {
-            var user = _ctx.Users.SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
+            var user = _ctx.Users.SingleOrDefault(x => x.Email.ToLower() == email.ToLower());
 
             // Return null if the user is not found
             if (user == null)
@@ -48,16 +48,14 @@ namespace API.Web.Services
         }
 
         public async Task<EntityEntry<User>> RegisterAsync(
-            string username,
+            string email,
             string password,
-            string firstname,
-            string lastname
+            string name
         ) {
             var user = _ctx.Users.Add(new User {
-                Username = username,
+                Email = email,
                 Password = HashPassword(password),
-                FirstName = firstname,
-                LastName = lastname
+                Name = name
             });
 
             await _ctx.SaveChangesAsync();
@@ -75,9 +73,9 @@ namespace API.Web.Services
             return _ctx.Users.ToListAsync();
         }
 
-        public bool UsernameIsUnique(string username)
+        public bool EmailIsUnique(string email)
         {
-            return !_ctx.Users.Any(x => x.Username.ToLower() == username.ToLower());
+            return !_ctx.Users.Any(x => x.Email.ToLower() == email.ToLower());
         }
 
         private bool ValidatePassword(string password, string hashedPassword) 

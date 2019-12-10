@@ -53,14 +53,13 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto registerDto) {
 
-            if (!_userService.UsernameIsUnique(registerDto.Username))
-                return ValidationProblem(nameof(registerDto.Username), "Username is already in use");
+            if (!_userService.EmailIsUnique(registerDto.Email))
+                return ValidationProblem(nameof(registerDto.Email), "Username is already in use");
 
             var entry = await _userService.RegisterAsync(
-                registerDto.Username,
+                registerDto.Email,
                 registerDto.Password,
-                registerDto.FirstName,
-                registerDto.LastName
+                registerDto.Name
             );
 
             return Ok(_mapper.Map<User, UserDto>(entry.Entity));
