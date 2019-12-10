@@ -12,6 +12,8 @@ namespace API.Web.Helpers
             CreateMap<UserDto, User>();
             CreateMap<Campaign, CampaignDto>();
             CreateMap<CampaignDto, Campaign>();
+            CreateMap<Goal, GoalDto>();
+            CreateMap<GoalDto, Goal>();
         }
     }
 }
