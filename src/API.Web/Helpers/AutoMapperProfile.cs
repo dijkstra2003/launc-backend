@@ -9,6 +9,7 @@ namespace API.Web.Helpers
         public AutoMapperProfile()
         {
             CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
         }
     }
 }

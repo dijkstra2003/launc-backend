@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using API.Core.Entities;
 using API.Infrastructure.Data;
 using API.Web.Helpers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 
 namespace API.Web.Services
@@ -10,7 +13,10 @@ namespace API.Web.Services
     public interface IUserService
     {
         User Authenticate(string username, string password);
-        IEnumerable<User> GetAll();
+        Task<EntityEntry<User>> RegisterAsync(string username, string password, string firstname, string lastname);
+        List<User> GetAll();
+        Task<List<User>> GetAllAsync();
+        bool UsernameIsUnique(string username);
     }
 
     public class UserService : IUserService
@@ -28,7 +34,7 @@ namespace API.Web.Services
 
         public User Authenticate(string username, string password)
         {
-            var user = _ctx.Users.SingleOrDefault(x => x.Username == username);
+            var user = _ctx.Users.SingleOrDefault(x => x.Username.ToLower() == username.ToLower());
 
             // Return null if the user is not found
             if (user == null)
@@ -41,14 +47,47 @@ namespace API.Web.Services
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<EntityEntry<User>> RegisterAsync(
+            string username,
+            string password,
+            string firstname,
+            string lastname
+        ) {
+            var user = _ctx.Users.Add(new User {
+                Username = username,
+                Password = HashPassword(password),
+                FirstName = firstname,
+                LastName = lastname
+            });
+
+            await _ctx.SaveChangesAsync();
+
+            return user;
+        }
+
+        public List<User> GetAll()
         {
             return _ctx.Users.ToList();
         }
 
-        public bool ValidatePassword(string password, string hashedPassword) 
+        public Task<List<User>> GetAllAsync()
         {
-            return true;
+            return _ctx.Users.ToListAsync();
+        }
+
+        public bool UsernameIsUnique(string username)
+        {
+            return !_ctx.Users.Any(x => x.Username.ToLower() == username.ToLower());
+        }
+
+        private bool ValidatePassword(string password, string hashedPassword) 
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+        }
+
+        private string HashPassword(string password) 
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
     }
 }
