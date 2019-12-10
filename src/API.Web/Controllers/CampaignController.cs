@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using API.Core.Dtos;
 using API.Web.Services;
+using AutoMapper;
 
 namespace API.Web.Controllers
 {
@@ -9,17 +10,25 @@ namespace API.Web.Controllers
     public class CampaignController : ControllerBase
     {
         private ICampaignService _campaignService;
+        private IMapper _mapper;
 
         public CampaignController(
-            ICampaignService campaignService
+            ICampaignService campaignService,
+            IMapper mapper
         ) {
             _campaignService = campaignService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public ActionResult createCampaign([FromBody]CampaignDto model)
+        public ActionResult createCampaign([FromBody]CampaignDto campaign)
         {
-            //TODO: return
+            _campaignService.Create(
+                campaign.CampaignName,
+                campaign.CampaignDescription
+            );
+
+            return Ok();
         }
     }
 }
