@@ -18,16 +18,6 @@ namespace API.Tests.Intergration.Setup
             ctx.SaveChanges();
         }
 
-        private static void RemoveOauth2Clients(DataContext ctx)
-        {
-            
-        }
-
-        private static void PopulateOauth2Clients(DataContext ctx)
-        {
-
-        }
-
         private static void RemoveUsers(DataContext ctx)
         {
             var users = ctx.Users;
