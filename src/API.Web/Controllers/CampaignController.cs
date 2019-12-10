@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using API.Core.Dtos;
-using System.Collections.Generic;
+using API.Web.Services;
 
 namespace API.Web.Controllers
 {
@@ -8,10 +8,18 @@ namespace API.Web.Controllers
     [Route("[controller]")]
     public class CampaignController : ControllerBase
     {
+        private ICampaignService _campaignService;
+
+        public CampaignController(
+            ICampaignService campaignService
+        ) {
+            _campaignService = campaignService;
+        }
+
         [HttpPost]
-        public ActionResult<IEnumerable<int>> Index()
+        public ActionResult createCampaign([FromBody]CampaignDto model)
         {
-            return new int[] {1, 2, 3, 4, 5};
+            //TODO: return
         }
     }
 }
