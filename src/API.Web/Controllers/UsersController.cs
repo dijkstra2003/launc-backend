@@ -17,10 +17,10 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IUserJwtService _userJwtService;
-        private IMapper _mapper;
-        private ILogger _logger;
+        private readonly IUserService _userService;
+        private readonly IUserJwtService _userJwtService;
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public UsersController(
             IUserService userService,
