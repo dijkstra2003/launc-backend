@@ -8,6 +8,7 @@ using API.Core.Entities;
 using System.Linq;
 using API.Core.Dtos.Auth;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -19,15 +20,18 @@ namespace WebApi.Controllers
         private IUserService _userService;
         private IUserJwtService _userJwtService;
         private IMapper _mapper;
+        private ILogger _logger;
 
         public UsersController(
             IUserService userService,
             IUserJwtService jwtService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<UsersController> logger
         ) {
             _userService = userService;
             _userJwtService = jwtService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -39,6 +43,7 @@ namespace WebApi.Controllers
             try {
                 user = _userService.Authenticate(model.Email, model.Password);
             } catch (UserAuthenticateException ex) {
+                _logger.LogInformation(ex.Message);
                 return BadRequest(new { message = "Email or password is incorrect" });
             }
 
