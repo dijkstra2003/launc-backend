@@ -34,10 +34,13 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateDto model)
         {
-            var user = _userService.Authenticate(model.Email, model.Password);
+            User user;
 
-            if (user == null)
+            try {
+                user = _userService.Authenticate(model.Email, model.Password);
+            } catch (UserAuthenticateException ex) {
                 return BadRequest(new { message = "Email or password is incorrect" });
+            }
 
             return Ok(_userJwtService.CreateJwt(user));
         }

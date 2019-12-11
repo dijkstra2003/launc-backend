@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,16 @@ namespace API.Web.Services
         bool EmailIsUnique(string email);
     }
 
+    [System.Serializable]
+    public class UserAuthenticateException : Exception
+    {
+        public UserAuthenticateException(string message) : base(message) { }
+        public UserAuthenticateException(string message, System.Exception inner) : base(message, inner) { }
+        protected UserAuthenticateException(
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
     public class UserService : IUserService
     {
         private readonly DataContext _ctx;
@@ -36,13 +47,13 @@ namespace API.Web.Services
         {
             var user = _ctx.Users.SingleOrDefault(x => x.Email.ToLower() == email.ToLower());
 
-            // Return null if the user is not found
-            if (user == null)
-                return null;
+            // Throw exception if the user is not found
+            if (!UserExists(user))
+                throw new UserAuthenticateException("User not found");
 
-            // Return null if user is invalid
+            // Throw exception if user is invalid
             if (!ValidatePassword(password, user.Password))
-                return null;
+                throw new UserAuthenticateException("User credentials do not match");
 
             return user;
         }
@@ -76,6 +87,11 @@ namespace API.Web.Services
         public bool EmailIsUnique(string email)
         {
             return !_ctx.Users.Any(x => x.Email.ToLower() == email.ToLower());
+        }
+
+        private bool UserExists(User user)
+        {
+            return user != null;
         }
 
         private bool ValidatePassword(string password, string hashedPassword) 
