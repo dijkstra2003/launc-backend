@@ -1,6 +1,8 @@
 using API.Core.Entities;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Web.Services
 {
@@ -8,6 +10,7 @@ namespace API.Web.Services
     {
         EntityEntry<Campaign> Create(string campaignName, string campaignDescription);
         Campaign GetCampaignById(int id);
+        List<Campaign> GetAll();
     }
 
     public class CampaignService : ICampaignService
@@ -36,6 +39,11 @@ namespace API.Web.Services
 
         public Campaign GetCampaignById(int id) {
             return _ctx.Campaign.Find(id);
+        }
+
+        public List<Campaign> GetAll()
+        {
+            return _ctx.Campaign.ToList();
         }
 
     }

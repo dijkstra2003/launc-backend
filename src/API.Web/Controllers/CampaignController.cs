@@ -4,6 +4,8 @@ using API.Web.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using API.Core.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Web.Controllers
 {
@@ -32,6 +34,13 @@ namespace API.Web.Controllers
         public ActionResult getCampaignById(int campaignId) {
             var campaign = _campaignService.GetCampaignById(campaignId);
             return Ok(campaign);
+        }
+
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            var campaigns = _campaignService.GetAll();
+            return Ok(campaigns);
         }
 
         [HttpPost]
