@@ -18,7 +18,7 @@ To build the docker image run
 docker build . -t launc
 ```
 
-To add a migration to the project, go to the root folder and run the following command:
+To add a migration to the project, go to the root folder and run the following command:  
 Change $MIGRATIONS_NAME to the name you want to use for the migration.
 ```
 dotnet ef migrations add $MIGRATIONS_NAME --context DataContext -p ./src/API.Infrastructure/API.Infrastructure.csproj -s ./src/API.Web/API.Web.csproj -o Data/Migrations
