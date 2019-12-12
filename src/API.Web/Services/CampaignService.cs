@@ -7,6 +7,7 @@ namespace API.Web.Services
     public interface ICampaignService
     {
         EntityEntry<Campaign> Create(string campaignName, string campaignDescription);
+        Campaign GetCampaignById(int id);
     }
 
     public class CampaignService : ICampaignService
@@ -31,6 +32,10 @@ namespace API.Web.Services
             _ctx.SaveChanges();
 
             return campaign;
+        }
+
+        public Campaign GetCampaignById(int id) {
+            return _ctx.Campaign.Find(id);
         }
 
     }

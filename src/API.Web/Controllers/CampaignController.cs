@@ -28,6 +28,12 @@ namespace API.Web.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("{campaignId}")]
+        public ActionResult getCampaignById(int campaignId) {
+            var campaign = _campaignService.GetCampaignById(campaignId);
+            return Ok(campaign);
+        }
+
         [HttpPost]
         public ActionResult createCampaignWithGoal([FromBody]CampaignDto campaign)
         {      
