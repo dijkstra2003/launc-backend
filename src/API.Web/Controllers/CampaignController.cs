@@ -4,12 +4,13 @@ using API.Web.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using API.Core.Entities;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace API.Web.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class CampaignController : ControllerBase
     {
@@ -37,6 +38,7 @@ namespace API.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult GetAll()
         {
             var campaigns = _campaignService.GetAll();
