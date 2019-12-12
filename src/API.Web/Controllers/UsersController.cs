@@ -8,6 +8,7 @@ using API.Core.Entities;
 using System.Linq;
 using API.Core.Dtos.Auth;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -16,28 +17,35 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IUserJwtService _userJwtService;
-        private IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IUserJwtService _userJwtService;
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public UsersController(
             IUserService userService,
             IUserJwtService jwtService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<UsersController> logger
         ) {
             _userService = userService;
             _userJwtService = jwtService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateDto model)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            User user;
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            try {
+                user = _userService.Authenticate(model.Email, model.Password);
+            } catch (UserAuthenticateException ex) {
+                _logger.LogInformation(ex.Message);
+                return BadRequest(new { message = "Email or password is incorrect" });
+            }
 
             return Ok(_userJwtService.CreateJwt(user));
         }
@@ -53,14 +61,13 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto registerDto) {
 
-            if (!_userService.UsernameIsUnique(registerDto.Username))
-                return ValidationProblem(nameof(registerDto.Username), "Username is already in use");
+            if (!_userService.EmailIsUnique(registerDto.Email))
+                return ValidationProblem(nameof(registerDto.Email), "Username is already in use");
 
             var entry = await _userService.RegisterAsync(
-                registerDto.Username,
+                registerDto.Email,
                 registerDto.Password,
-                registerDto.FirstName,
-                registerDto.LastName
+                registerDto.Name
             );
 
             return Ok(_mapper.Map<User, UserDto>(entry.Entity));
