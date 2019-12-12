@@ -23,12 +23,13 @@ namespace API.Web.Services
             int campaignId,
             int goalId
         ) {
-            var campaignGoal = _ctx.CampaignGoal.Add(
-                new CampaignGoal {
+            var campaignGoal = _ctx.CampaignGoal.Add(new CampaignGoal {
                     CampaignFk = campaignId,
                     GoalFk = goalId
                 }
             );
+
+            _ctx.SaveChanges();
 
             return campaignGoal;
         }

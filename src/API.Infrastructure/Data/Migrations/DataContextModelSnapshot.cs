@@ -56,7 +56,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<int?>("CampaignFkNavigationId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("GoalFk")
@@ -64,6 +64,9 @@ namespace API.Infrastructure.Data.Migrations
 
                     b.Property<int?>("GoalFkNavigationId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -102,7 +105,7 @@ namespace API.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("GoalEnd")

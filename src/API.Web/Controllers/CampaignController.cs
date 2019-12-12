@@ -33,8 +33,8 @@ namespace API.Web.Controllers
         {      
             var _goal = createGoal(campaign);
             var _campaign = createCampaign(campaign);
-            // var _campaignGoal = createCampaignGoal(_campaign.Entity.id, _goal.Entity.id);
-
+            var _campaignGoal = createCampaignGoal(_campaign.Entity.Id, _goal.Entity.Id);
+            
             return Ok(_campaign.Entity);
         }
 
@@ -57,11 +57,13 @@ namespace API.Web.Controllers
             return _campaign;
         }
 
-        private void createCampaignGoal(int campaignId, int goalId) {
+        private EntityEntry<CampaignGoal> createCampaignGoal(int campaignId, int goalId) {
             var _campaignGoal = _campaignGoalService.Create(
                 campaignId,
                 goalId
             );
+
+            return _campaignGoal;
         }
     }
 }
