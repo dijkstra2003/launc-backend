@@ -11,7 +11,7 @@ namespace API.Infrastructure.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Campaign> Campaign { get; set; }
-        public DbSet<CampaignGoal> CampaignsGoal { get; set; }
+        public DbSet<CampaignGoal> CampaignGoal { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Goal> Goal { get; set; }
         public DbSet<GoalSubGoal> GoalSubGoal { get; set; }

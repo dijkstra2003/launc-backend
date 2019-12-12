@@ -1,11 +1,12 @@
 using API.Core.Entities;
 using API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace API.Web.Services
 {
     public interface ICampaignService
     {
-        Campaign Create(string campaignName, string campaignDescription);
+        EntityEntry<Campaign> Create(string campaignName, string campaignDescription);
     }
 
     public class CampaignService : ICampaignService
@@ -18,7 +19,7 @@ namespace API.Web.Services
             _ctx = ctx;
         }
 
-        public Campaign Create(
+        public EntityEntry<Campaign> Create(
             string campaignName, 
             string campaignDescription
         ) {

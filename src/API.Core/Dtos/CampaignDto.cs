@@ -4,6 +4,6 @@ namespace API.Core.Dtos
     {
         public string CampaignName { get; set; }
         public string CampaignDescription { get; set; }
-        public GoalDto goalDto { get; set; }
+        public GoalDto Goal { get; set; }
     }
 }
