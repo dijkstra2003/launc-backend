@@ -3,15 +3,17 @@ using System;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace API.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20191210134634_TypeRemoval")]
+    partial class TypeRemoval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,28 +21,7 @@ namespace API.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("API.Core.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("API.Infrastructure.Entities.Campaign", b =>
+            modelBuilder.Entity("API.Core.Entities.Campaign", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +58,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<int?>("CampaignFkNavigationId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("GoalFk")
@@ -86,16 +67,13 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<int?>("GoalFkNavigationId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("timestamp without time zone");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignFkNavigationId");
 
                     b.HasIndex("GoalFkNavigationId");
 
-                    b.ToTable("CampaignGoal");
+                    b.ToTable("CampaignsGoal");
                 });
 
             modelBuilder.Entity("API.Core.Entities.Comment", b =>
@@ -126,7 +104,7 @@ namespace API.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("GoalEnd")

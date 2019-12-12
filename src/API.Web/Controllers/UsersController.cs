@@ -10,7 +10,7 @@ using API.Core.Dtos.Auth;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace WebApi.Controllers
+namespace API.Web.Controllers
 {
     [Authorize]
     [ApiController]

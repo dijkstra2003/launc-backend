@@ -60,6 +60,9 @@ namespace API.Web
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserJwtService, UserJwtService>();
             services.AddScoped<IValueService, ValueService>();
+            services.AddScoped<ICampaignService, CampaignService>();
+            services.AddScoped<IGoalService, GoalService>();
+            services.AddScoped<ICampaignGoalService, CampaignGoalService>();
 
             services.AddDbContext<DataContext>(options => {
                 
