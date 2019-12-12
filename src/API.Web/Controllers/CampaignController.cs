@@ -30,7 +30,8 @@ namespace API.Web.Controllers
             _campaignGoalService = campaignGoalService;
             _mapper = mapper;
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("{campaignId}")]
         public ActionResult getCampaignById(int campaignId) {
             var campaign = _campaignService.GetCampaignById(campaignId);
