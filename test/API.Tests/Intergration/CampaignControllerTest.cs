@@ -11,23 +11,15 @@ using System;
 
 namespace API.Tests.Intergration
 {
-    public class CampaignControllerTest : IDisposable
+    public class CampaignControllerTest : IClassFixture<TestApiApplicationFactory<Startup>>
     {
         private readonly ITestOutputHelper _output;
         private TestApiApplicationFactory<Startup> _factory;
-        private HttpClient _client;     
 
         public CampaignControllerTest(ITestOutputHelper output) {
             _output = output;
             _factory = new TestApiApplicationFactory<Startup>();
-            _client = _factory.CreateClient();
         }   
-
-        public void Dispose()
-        {
-            _factory.Dispose();
-            _client.Dispose();
-        }
 
         [Fact]
         public async Task CreateCampaign()
@@ -53,9 +45,10 @@ namespace API.Tests.Intergration
         }
 
         private async Task<CampaignDto> CreateCampaignRequest(CampaignDto data) {
+            var client = _factory.CreateAuthClient();
             var json = JsonConvert.SerializeObject(data);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("/campaign", content);
+            var response = await client.PostAsync("/campaign", content);
 
             response.EnsureSuccessStatusCode();
 

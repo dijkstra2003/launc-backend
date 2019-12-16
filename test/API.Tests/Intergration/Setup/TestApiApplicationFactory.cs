@@ -56,12 +56,12 @@ namespace API.Tests.Intergration.Setup
 
                     try 
                     {
-                        SeedData.PopulateDb(dataContext);
+                        SeedData.InitializeDbForTests(dataContext);
                     }
                     catch (Exception ex)
                     {
                         logger.LogError(ex, "An error occurred seeding the " +
-                            "database with test data. Error: {ex.Message}");
+                            "database with test data. Error: {Message}", ex.Message);
                     }
                 }
             });        
