@@ -14,10 +14,20 @@ branches:
   - dev
 
 install:
-    dotnet restore src/API.Web/API.Web.csproj
+  - dotnet restore src/API.Web/API.Web.csproj
+  - dotnet tool install --global dotnet-sonarscanner
+
+before_script:
+  - export PATH=$PATH:/home/travis/.dotnet/tools
 
 script:
   - dotnet test
+  - dotnet build-server shutdown
+  - dotnet-sonarscanner begin /k:launc-backend /d:sonar.host.url=http://dev.launc.space:9000 
+    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml 
+    /d:sonar.coverage.exclusions=”**Test*.cs”
+  - dotnet build
+  - dotnet-sonarscanner end
 
 addons:
   ssh_known_hosts:
@@ -34,12 +44,12 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: bash scripts/deploy.sh accept \
-            && ssh -t launc@dev.launc.space "bash docker/deploy_accept.sh"
+            && ssh -t launc@dev.launc.space "source ~/.bashrc; bash docker/deploy_accept.sh"
     on:
       branch: master
   - provider: script
     skip_cleanup: true
     script: bash scripts/deploy.sh release \
-            && ssh -t launc@launc.space "bash docker/deploy_prod.sh"
+            && ssh -t launc@launc.space "source ~/.bashrc; bash docker/deploy_prod.sh"
     on:
       branch: release
