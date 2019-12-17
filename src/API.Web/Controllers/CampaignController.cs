@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using API.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Web.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CampaignController : ControllerBase
@@ -30,12 +32,14 @@ namespace API.Web.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet("{campaignId}")]
-        public ActionResult getCampaignById(int campaignId) {
+        public ActionResult GetCampaignById(int campaignId) {
             var campaign = _campaignService.GetCampaignById(campaignId);
             return Ok(campaign);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAll()
         {
@@ -44,16 +48,16 @@ namespace API.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult createCampaignWithGoal([FromBody]CampaignDto campaign)
+        public ActionResult CreateCampaignWithGoal([FromBody] CampaignDto campaign)
         {      
-            var _goal = createGoal(campaign);
-            var _campaign = createCampaign(campaign);
-            var _campaignGoal = createCampaignGoal(_campaign.Entity.Id, _goal.Entity.Id);
+            var _goal = CreateGoal(campaign);
+            var _campaign = CreateCampaign(campaign);
+            var _campaignGoal = CreateCampaignGoal(_campaign.Entity.Id, _goal.Entity.Id);
             
             return Ok(_campaign.Entity);
         }
 
-        private EntityEntry<Goal> createGoal(CampaignDto campaign) {
+        private EntityEntry<Goal> CreateGoal(CampaignDto campaign) {
             var _goal = _goalService.Create(
                 campaign.Goal.GoalStart,
                 campaign.Goal.GoalEnd,
@@ -63,7 +67,7 @@ namespace API.Web.Controllers
             return _goal;
         }
 
-        private EntityEntry<Campaign> createCampaign(CampaignDto campaign) {
+        private EntityEntry<Campaign> CreateCampaign(CampaignDto campaign) {
             var _campaign = _campaignService.Create(
                 campaign.CampaignName,
                 campaign.CampaignDescription
@@ -72,7 +76,7 @@ namespace API.Web.Controllers
             return _campaign;
         }
 
-        private EntityEntry<CampaignGoal> createCampaignGoal(int campaignId, int goalId) {
+        private EntityEntry<CampaignGoal> CreateCampaignGoal(int campaignId, int goalId) {
             var _campaignGoal = _campaignGoalService.Create(
                 campaignId,
                 goalId

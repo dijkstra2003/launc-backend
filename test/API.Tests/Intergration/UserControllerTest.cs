@@ -7,25 +7,17 @@ using API.Web;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
-using System;
 
 namespace API.Tests.Intergration
 {
-    public class UserControllerTest : IDisposable
+    public class UserControllerTest : IClassFixture<TestApiApplicationFactory<Startup>>
     {
         private readonly ITestOutputHelper _output;
         private TestApiApplicationFactory<Startup> _factory;
-        private HttpClient _client;
 
-        public UserControllerTest(ITestOutputHelper output) {
+        public UserControllerTest(ITestOutputHelper output, TestApiApplicationFactory<Startup> factory) {
             _output = output;
-            _factory = new TestApiApplicationFactory<Startup>();
-            _client = _factory.CreateClient();
-        }
-        public void Dispose()
-        {
-            _factory.Dispose();
-            _client.Dispose();
+            _factory = factory;
         }
 
         [Fact]
@@ -44,9 +36,11 @@ namespace API.Tests.Intergration
 
         private async Task<UserDto> AddUserRequest(RegisterDto data)
         {
+            var client = _factory.CreateClient();
+
             var json = JsonConvert.SerializeObject(data);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("/users", content);
+            var response = await client.PostAsync("/users", content);
 
             response.EnsureSuccessStatusCode();
 
