@@ -51,7 +51,7 @@ namespace API.Web.Services
                 throw new UserAuthenticateException("User not found");
 
             if (!ValidatePassword(password, user.Password))
-                throw new UserAuthenticateException("User credentials do not match");x
+                throw new UserAuthenticateException("User credentials do not match");
 
             return user;
         }
