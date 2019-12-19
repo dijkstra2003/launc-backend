@@ -28,7 +28,6 @@ namespace API.Web.Services
 
         public string CreateJwt(User user)
         {
-            // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor

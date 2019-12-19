@@ -7,7 +7,10 @@ namespace API.Web.Helpers
     {
         public enum EnvVariable {
             [Key("LAUNC_DEFAULT_CONNECTION_STRING")]
-            DefaultConnectionString
+            DefaultConnectionString,
+
+            [Key("MOLLIE_KEY")]
+            MollieKey
         }
 
         private static string EnvironmentKey(EnvVariable env) {

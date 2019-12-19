@@ -47,13 +47,11 @@ namespace API.Web.Services
         {
             var user = _ctx.Users.SingleOrDefault(x => x.Email.ToLower() == email.ToLower());
 
-            // Throw exception if the user is not found
             if (!UserExists(user))
                 throw new UserAuthenticateException("User not found");
 
-            // Throw exception if user is invalid
             if (!ValidatePassword(password, user.Password))
-                throw new UserAuthenticateException("User credentials do not match");
+                throw new UserAuthenticateException("User credentials do not match");x
 
             return user;
         }
