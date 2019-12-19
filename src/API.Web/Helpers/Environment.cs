@@ -10,7 +10,11 @@ namespace API.Web.Helpers
             DefaultConnectionString,
 
             [Key("MOLLIE_KEY")]
-            MollieKey
+            MollieKey,
+            [Key("MOLLIE_REDIRECT_URL")]
+            MollieRedirectURL,
+            [Key("MOLLIE_WEBHOOK_URL")]
+            MollieWebhookUrl
         }
 
         private static string EnvironmentKey(EnvVariable env) {

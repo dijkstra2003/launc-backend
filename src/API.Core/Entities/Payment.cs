@@ -17,5 +17,6 @@ namespace API.Core.Entities
         public virtual SubGoal SubGoal { get; set; }
         public decimal Amount { get; set; }
         public PaymentStatus Status { get; set; } = Payment.PaymentStatus.OPEN;
+        public string MollieId { get; set; }
     }
 }

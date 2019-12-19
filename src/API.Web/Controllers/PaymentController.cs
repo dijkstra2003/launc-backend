@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using API.Core.Dtos;
+using API.Core.Dtos.Payment;
 using API.Core.Entities;
 using API.Web.Services;
 using AutoMapper;
@@ -23,12 +23,29 @@ namespace API.Web.Controllers
             _mapper = mapper;
         }
 
+        [Route("ideal")]
         [HttpPost]
-        public async Task<IActionResult> CreatePayment([FromBody] PaymentDto paymentDto)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatePaymentIdeal([FromBody] PaymentDto paymentDto)
         {
-            var payment = await _paymentService.CreatePayment(100, new Goal { Id = 1 }, new SubGoal { Id = 1 });
+            var payment = await _paymentService.CreatePayment(
+                100,
+                new Goal { Id = 1 },
+                new SubGoal { Id = 1 },
+                PaymentMethod.IDEAL
+            );
 
-            return Ok(_mapper.Map<Payment, PaymentDto>(payment));
+            return Ok(new PaymentResponse { Url = "" });
+        }
+
+        [Route("paypal")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatePaymentPaypal([FromBody] PaymentDto paymentDto)
+        {
+            var payment = await _paymentService.CreatePayment(100, new Goal { Id = 1 }, new SubGoal { Id = 1 }, PaymentMethod.PAYPAL);
+
+            return Ok(payment);
         }
     }
 }
