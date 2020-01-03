@@ -28,10 +28,13 @@ namespace API.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreatePaymentIdeal([FromBody] PaymentDto paymentDto)
         {
+            var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+            var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
+
             var payment = await _paymentService.CreatePayment(
-                100,
-                new Goal { Id = 1 },
-                new SubGoal { Id = 1 },
+                paymentDto.Amount,
+                goal,
+                subgoal,
                 PaymentMethod.IDEAL
             );
 

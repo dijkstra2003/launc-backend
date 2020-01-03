@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Threading.Tasks;
 using API.Core.Entities;
 using API.Infrastructure.Data;
@@ -70,13 +71,17 @@ namespace API.Web.Services
 
         public async Task<Payment> CreatePayment(decimal amount, Goal goal, SubGoal subgoal, PaymentMethod method)
         {
-            var payment = new Payment();
-            payment.Amount = amount;
-            payment.Goal = goal;
+            var payment = new MolliePayment {
+                Amount = amount,
+                Goal = goal,
+            };
 
             var response = await CreateMolliePayment(amount, "Launc space pledge", method);
 
-            payment.MollieId = response.Id;
+            payment.Response = (MollieResponse) response;
+
+            _ctx.MolliePayment.Add(payment);
+            await _ctx.SaveChangesAsync();
 
             return payment;
         }
@@ -84,10 +89,11 @@ namespace API.Web.Services
         public async Task<PaymentResponse> CreateMolliePayment(decimal amount, string description, PaymentMethod method)
         {
             var paymentMethod = PaymentMethodToMolliePaymentMethod(method);
+            var amountFormatted = amount.ToString(CultureInfo.InvariantCulture);
 
             var paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
-                Description = "Launc space pledge",
+                Amount = new Amount(Currency.EUR, amountFormatted),
+                Description = description,
                 RedirectUrl = this.MOLLIE_REDIRECT_URL,
                 WebhookUrl = this.MOLLIE_WEBHOOK_URL,
                 Method = paymentMethod

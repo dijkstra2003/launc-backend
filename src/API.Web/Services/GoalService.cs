@@ -2,6 +2,7 @@ using API.Core.Entities;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Threading.Tasks;
 
 namespace API.Web.Services
 {
@@ -12,6 +13,12 @@ namespace API.Web.Services
             DateTime GoalEnd,
             int MinAmount
         );
+        
+        Goal GetGoal(int id);
+        Task<Goal> GetGoalAsync(int id);
+        SubGoal GetSubGoal(int id);
+        Task<SubGoal> GetSubGoalAsync(int id);
+
     }
 
     public class GoalService : IGoalService
@@ -38,6 +45,30 @@ namespace API.Web.Services
             _ctx.SaveChanges();
 
             return goal;
+        }
+
+        public Goal GetGoal(int id)
+        {
+            return _ctx.Goal.Find(id);
+        }
+
+        public async Task<Goal> GetGoalAsync(int id)
+        {
+            return await _ctx.Goal
+                .FindAsync(id)
+                .AsTask();
+        }
+
+        public SubGoal GetSubGoal(int id)
+        {
+            return _ctx.Subgoal.Find(id);
+        }
+
+        public async Task<SubGoal> GetSubGoalAsync(int id)
+        {
+            return await _ctx.Subgoal
+                .FindAsync(id)
+                .AsTask();
         }
     }
 }

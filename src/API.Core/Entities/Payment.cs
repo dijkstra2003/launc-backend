@@ -1,6 +1,7 @@
+
 namespace API.Core.Entities
 {
-    public class Payment : BaseEntity
+    public abstract class Payment : BaseEntity
     {
         public enum PaymentStatus {
             OPEN,
@@ -17,6 +18,11 @@ namespace API.Core.Entities
         public virtual SubGoal SubGoal { get; set; }
         public decimal Amount { get; set; }
         public PaymentStatus Status { get; set; } = Payment.PaymentStatus.OPEN;
-        public string MollieId { get; set; }
     }
+
+    public class MolliePayment : Payment {
+        public virtual MollieResponse Response { get; set; }
+    }
+
+    public class MollieResponse : Mollie.Api.Models.Payment.Response.PaymentResponse {}
 }
