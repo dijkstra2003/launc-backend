@@ -11,6 +11,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using static API.Web.Helpers.Environment;
+using Amount = Mollie.Api.Models.Amount;
 
 namespace API.Web.Services
 {
@@ -78,7 +79,7 @@ namespace API.Web.Services
 
             var response = await CreateMolliePayment(amount, "Launc space pledge", method);
 
-            payment.Response = (MollieResponse) response;
+            payment.Response = MollieResponse.FromMolliePaymentResponse(response);
 
             _ctx.MolliePayment.Add(payment);
             await _ctx.SaveChangesAsync();
