@@ -19,7 +19,9 @@ using Amount = Mollie.Api.Models.Amount;
 
 namespace API.Web.Services
 {
-    public interface IMolliePaymentService : IPaymentService<MolliePayment> {}
+    public interface IMolliePaymentService : IPaymentService<MolliePayment> {
+        Task UpdatePaymentStatus(string paymentId);
+    }
 
     public class MolliePaymentService : IMolliePaymentService
     {

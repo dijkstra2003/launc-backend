@@ -9,6 +9,7 @@ using API.Web.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace API.Web.Controllers
 {
@@ -21,17 +22,20 @@ namespace API.Web.Controllers
         private readonly IMolliePaymentService _paymentService;
         private readonly IGoalService _goalService;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public PaymentController(
             IUserService userService,
             IMolliePaymentService paymentService,
             IGoalService goalService,
-            IMapper mapper
+            IMapper mapper,
+            ILogger logger
         ) {
             _userService = userService;
             _paymentService = paymentService;
             _goalService = goalService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -51,7 +55,7 @@ namespace API.Web.Controllers
             var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
             var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
-            var payment = (MolliePayment) await _paymentService.CreatePayment(
+            var payment = await _paymentService.CreatePayment(
                 Decimal.Parse(paymentDto.Amount),
                 user,
                 goal,
@@ -70,7 +74,7 @@ namespace API.Web.Controllers
             var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
             var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
-            var payment = (MolliePayment) await _paymentService.CreatePayment(
+            var payment = await _paymentService.CreatePayment(
                 Decimal.Parse(paymentDto.Amount),
                 user,
                 goal,
@@ -87,7 +91,12 @@ namespace API.Web.Controllers
         [Consumes("application/x-www-form-urlencoded")]
         public async Task<IActionResult> ProcessWebhook([FromForm] PaymentWebhook paymentWebhook) {
 
-            await ((MolliePaymentService) _paymentService).UpdatePaymentStatus(paymentWebhook.Id);
+            try {
+                await _paymentService.UpdatePaymentStatus(paymentWebhook.Id);
+            } catch (Exception e) {
+                _logger.LogError(e.Message);
+                return BadRequest();
+            } 
 
             return Ok();
         }
