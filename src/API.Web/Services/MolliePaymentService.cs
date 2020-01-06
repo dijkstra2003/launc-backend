@@ -91,7 +91,7 @@ public class MolliePaymentService : IPaymentService
         public async Task<PaymentResponse> CreateMolliePayment(decimal amount, string description, PaymentMethod method)
         {
             var paymentMethod = MollieConverter.ToMolliePaymentMethod(method);
-            var amountFormatted = amount.ToString(CultureInfo.InvariantCulture);
+            var amountFormatted = String.Format("{0:0.00}", amount);
 
             var paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, amountFormatted),

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using API.Core.Dtos.Mollie;
 using API.Core.Dtos.Payment;
@@ -34,7 +35,7 @@ namespace API.Web.Controllers
             var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = (MolliePayment) await _paymentService.CreatePayment(
-                paymentDto.Amount,
+                Decimal.Parse(paymentDto.Amount),
                 goal,
                 subgoal,
                 PaymentMethod.IDEAL
@@ -52,7 +53,7 @@ namespace API.Web.Controllers
             var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = (MolliePayment) await _paymentService.CreatePayment(
-                paymentDto.Amount,
+                Decimal.Parse(paymentDto.Amount),
                 goal,
                 subgoal,
                 PaymentMethod.PAYPAL

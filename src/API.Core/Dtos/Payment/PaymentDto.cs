@@ -9,6 +9,6 @@ namespace API.Core.Dtos.Payment
         public int GoalId { get; set; }
         public int SubGoalId { get; set; }
         [PledgeAmount]
-        public decimal Amount { get; set; }
+        public string Amount { get; set; }
     }
 }

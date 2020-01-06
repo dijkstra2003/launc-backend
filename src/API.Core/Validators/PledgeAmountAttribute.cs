@@ -6,7 +6,8 @@ namespace API.Core.Validators
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var amount = (decimal) value; 
+            if (!decimal.TryParse((string) value, out decimal amount))
+                return new ValidationResult("Value cannot be converted to a decimal");
 
             if (amount < 0)
                 return new ValidationResult("Pledge may not be negative");
