@@ -29,7 +29,7 @@ namespace API.Core.Entities
 
     public class MollieResponse : BaseEntity {
         public int PaymentId { get; set; }
-        public MolliePayment Payment { get; set; }
+        public virtual MolliePayment Payment { get; set; }
         public string MollieId { get; set; }
         public decimal AmountRemaining { get; set; }
         public string AmountRemainingCurrency { get; set; }

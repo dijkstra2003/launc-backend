@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Core.Dtos.Mollie;
@@ -17,13 +18,13 @@ namespace API.Web.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IPaymentService _paymentService;
+        private readonly IMolliePaymentService _paymentService;
         private readonly IGoalService _goalService;
         private readonly IMapper _mapper;
 
         public PaymentController(
             IUserService userService,
-            IPaymentService paymentService,
+            IMolliePaymentService paymentService,
             IGoalService goalService,
             IMapper mapper
         ) {
@@ -31,6 +32,15 @@ namespace API.Web.Controllers
             _paymentService = paymentService;
             _goalService = goalService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListPayments()
+        {
+            var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
+            var payments = await _paymentService.ListPaymentsFromUser(user);
+
+            return Ok(_mapper.Map<List<MolliePayment>, List<ListPaymentDto>>(payments));
         }
 
         [Route("ideal")]

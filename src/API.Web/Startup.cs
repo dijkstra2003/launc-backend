@@ -63,7 +63,7 @@ namespace API.Web
             services.AddScoped<ICampaignService, CampaignService>();
             services.AddScoped<IGoalService, GoalService>();
             services.AddScoped<ICampaignGoalService, CampaignGoalService>();
-            services.AddScoped<IPaymentService, MolliePaymentService>();
+            services.AddScoped<IMolliePaymentService, MolliePaymentService>();
             services.AddScoped<Environment, Environment>();
 
             services.AddDbContext<DataContext>(options => {

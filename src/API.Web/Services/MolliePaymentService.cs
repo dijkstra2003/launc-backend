@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ using Amount = Mollie.Api.Models.Amount;
 
 namespace API.Web.Services
 {
-public class MolliePaymentService : IPaymentService
+    public interface IMolliePaymentService : IPaymentService<MolliePayment> {}
+
+    public class MolliePaymentService : IMolliePaymentService
     {
         private readonly string MOLLIE_KEY;
         private readonly string MOLLIE_REDIRECT_URL;
@@ -49,7 +52,7 @@ public class MolliePaymentService : IPaymentService
             return new PaymentClient(MOLLIE_KEY);
         }
 
-        public async Task<Payment> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method)
+        public async Task<MolliePayment> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method)
         {
             var payment = new MolliePayment {
                 User = user,
@@ -67,6 +70,16 @@ public class MolliePaymentService : IPaymentService
             _logger.LogInformation("Created payment with id: " + payment.Response.MollieId);
 
             return payment;
+        }
+
+        public async Task<List<MolliePayment>> ListPaymentsFromUser(User user)
+        {
+            return await _ctx.MolliePayment
+                .Include(x => x.Response)
+                .Include(x => x.Goal)
+                .Include(x => x.SubGoal)
+                .Where(x => x.User.Id == user.Id)
+                .ToListAsync();
         }
 
         private async Task UpdatePayment(MolliePayment payment) {
