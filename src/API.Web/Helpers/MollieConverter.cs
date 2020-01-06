@@ -1,4 +1,5 @@
 using API.Core.Entities;
+using API.Web.Services;
 using MolliePayment = Mollie.Api.Models.Payment;
 
 namespace API.Web.Helpers
@@ -39,6 +40,20 @@ namespace API.Web.Helpers
 
                 case MolliePayment.PaymentStatus.Pending:
                     return Payment.PaymentStatus.PENDING;
+
+                default:
+                    throw new UnsupportedConverstionException();
+            }
+        }
+
+        public static MolliePayment.PaymentMethod ToMolliePaymentMethod(PaymentMethod status)
+        {
+            switch (status) {
+                case PaymentMethod.IDEAL:
+                    return MolliePayment.PaymentMethod.Ideal;
+
+                case PaymentMethod.PAYPAL:
+                    return MolliePayment.PaymentMethod.PayPal;
 
                 default:
                     throw new UnsupportedConverstionException();

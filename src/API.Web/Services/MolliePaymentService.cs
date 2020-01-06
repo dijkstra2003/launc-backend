@@ -90,7 +90,7 @@ public class MolliePaymentService : IPaymentService
 
         public async Task<PaymentResponse> CreateMolliePayment(decimal amount, string description, PaymentMethod method)
         {
-            var paymentMethod = PaymentMethodToMolliePaymentMethod(method);
+            var paymentMethod = MollieConverter.ToMolliePaymentMethod(method);
             var amountFormatted = amount.ToString(CultureInfo.InvariantCulture);
 
             var paymentRequest = new PaymentRequest() {
@@ -116,17 +116,6 @@ public class MolliePaymentService : IPaymentService
 
             } catch(Exception e) {
                 _logger.LogError("Error while updating the payment status: " + e.Message);
-            }
-        }
-
-        private Mollie.Api.Models.Payment.PaymentMethod PaymentMethodToMolliePaymentMethod(PaymentMethod method) {
-            switch (method) {
-                case PaymentMethod.IDEAL:
-                    return Mollie.Api.Models.Payment.PaymentMethod.Ideal;
-                case PaymentMethod.PAYPAL:
-                    return Mollie.Api.Models.Payment.PaymentMethod.PayPal;
-                default:
-                    throw new System.NotImplementedException();
             }
         }
     }
