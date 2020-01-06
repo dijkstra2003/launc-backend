@@ -1,8 +1,11 @@
+using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Core.Entities;
 using API.Infrastructure.Data;
 using API.Web.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mollie.Api.Client;
@@ -29,7 +32,7 @@ public class MolliePaymentService : IPaymentService
             DataContext ctx,
             IConfiguration configuration,
             ILogger<MolliePaymentService> logger,
-            Environment environment
+            Helpers.Environment environment
         ) {
             _ctx = ctx;
             _logger = logger;
@@ -55,7 +58,7 @@ public class MolliePaymentService : IPaymentService
 
             var response = await CreateMolliePayment(amount, "Launc space pledge", method);
 
-            payment.Response = MollieResponse.FromMolliePaymentResponse(response);
+            payment.Response = MollieResponse.FromMolliePaymentResponse(response, payment);
 
             _ctx.MolliePayment.Add(payment);
             
@@ -65,6 +68,20 @@ public class MolliePaymentService : IPaymentService
             return payment;
         }
 
+        private async Task UpdatePayment(MolliePayment payment) {
+            _ctx.MolliePayment.Update(payment);
+            await _ctx.SaveChangesAsync();
+        }
+
+        private async Task<MolliePayment> FetchPaymentByPaymentId(string paymentId)
+        {
+            var response = await _ctx.MollieResponse
+                .Include(x => x.Payment)
+                .Where(x => x.MollieId == paymentId)
+                .SingleOrDefaultAsync();
+            
+            return response.Payment;
+        }
 
         public async Task<PaymentResponse> FetchMolliePayment(string paymentId)
         {
@@ -88,11 +105,18 @@ public class MolliePaymentService : IPaymentService
         }
 
         public async Task UpdatePaymentStatus(string paymentId) {
-            var payment = FetchMolliePayment(paymentId);
+            var localPayment = await FetchPaymentByPaymentId(paymentId);
+            var molliePayment = await FetchMolliePayment(paymentId);
 
-            
+            try {
+                var paymentStatus = molliePayment.Status ?? throw new NullReferenceException();
+                localPayment.Status = MollieConverter.FromMolliePaymentStatus(paymentStatus);
 
+                await UpdatePayment(localPayment);
 
+            } catch(Exception e) {
+                _logger.LogError("Error while updating the payment status: " + e.Message);
+            }
         }
 
         private Mollie.Api.Models.Payment.PaymentMethod PaymentMethodToMolliePaymentMethod(PaymentMethod method) {

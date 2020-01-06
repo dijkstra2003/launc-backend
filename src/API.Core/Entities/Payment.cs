@@ -28,6 +28,7 @@ namespace API.Core.Entities
     }
 
     public class MollieResponse : BaseEntity {
+        public MolliePayment Payment { get; set; }
         public string MollieId { get; set; }
         public decimal AmountRemaining { get; set; }
         public string AmountRemainingCurrency { get; set; }
@@ -56,10 +57,11 @@ namespace API.Core.Entities
         public string AmountCurrency { get; set; }
         public DateTime? AuthorizedAt { get; set; }
 
-        public static MollieResponse FromMolliePaymentResponse(PaymentResponse response) {
+        public static MollieResponse FromMolliePaymentResponse(PaymentResponse response, MolliePayment payment) {
             
             var mollieResponse = new MollieResponse();
 
+            mollieResponse.Payment = payment;
             mollieResponse.MollieId = response.Id;
 
             if (response.AmountRemaining != null && Decimal.TryParse(response.AmountRemaining.Value, out decimal amountRemaining)) {

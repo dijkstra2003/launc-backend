@@ -65,6 +65,9 @@ namespace API.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ProcessWebhook([FromBody] PaymentWebhook paymentWebhook) {
+
+            await ((MolliePaymentService) _paymentService).UpdatePaymentStatus(paymentWebhook.Id);
+
             return Ok();
         }
     }
