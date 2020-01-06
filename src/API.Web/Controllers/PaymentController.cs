@@ -30,11 +30,8 @@ namespace API.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreatePaymentIdeal([FromBody] PaymentDto paymentDto)
         {
-            var goal = new Goal();
-            var subgoal = new SubGoal();
-
-            // var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
-            // var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
+            var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+            var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = (MolliePayment) await _paymentService.CreatePayment(
                 paymentDto.Amount,
