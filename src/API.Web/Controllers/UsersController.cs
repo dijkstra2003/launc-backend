@@ -46,8 +46,13 @@ namespace API.Web.Controllers
                 _logger.LogInformation(ex.Message);
                 return BadRequest(new { message = "Email or password is incorrect" });
             }
+            var JwtToken = _userJwtService.CreateJwt(user);
 
-            return Ok(_userJwtService.CreateJwt(user));
+            return Ok(new {
+                Name = user.Name,
+                JwtToken = _userJwtService.CreateJwt(user) 
+                }
+            );
         }
 
         [HttpGet]
