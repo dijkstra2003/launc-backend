@@ -57,8 +57,10 @@ namespace API.Core.Entities
             
             var mollieResponse = new MollieResponse();
 
-            mollieResponse.AmountRemaining = Decimal.Parse(response.AmountRemaining.Value);
-            mollieResponse.AmountRemainingCurrency = response.AmountRemaining.Currency;
+            if (response.AmountRemaining != null && Decimal.TryParse(response.AmountRemaining.Value, out decimal amountRemaining)) {
+                mollieResponse.AmountRemaining = amountRemaining;
+                mollieResponse.AmountRemainingCurrency = response.AmountRemaining.Currency;
+            }
 
             mollieResponse.RedirectUrl = response.RedirectUrl;
             mollieResponse.WebhookUrl = response.WebhookUrl;
@@ -71,11 +73,15 @@ namespace API.Core.Entities
 
             mollieResponse.Description = response.Description;
 
-            mollieResponse.AmountCaptured = Decimal.Parse(response.AmountCaptured.Value);
-            mollieResponse.AmountCapturedCurrency = response.AmountCaptured.Currency;
+            if (response.AmountCaptured != null && Decimal.TryParse(response.AmountCaptured.Value, out decimal amountCaptured)) {
+                mollieResponse.AmountCaptured = amountCaptured;
+                mollieResponse.AmountCapturedCurrency = response.AmountCaptured.Currency;
+            }
 
-            mollieResponse.AmountRefunded = Decimal.Parse(response.AmountRefunded.Value);
-            mollieResponse.AmountRefundedCurrency = response.AmountRefunded.Currency;
+            if (response.AmountRefunded != null && Decimal.TryParse(response.AmountRefunded.Value, out decimal amountRefuned)) {
+                mollieResponse.AmountRefunded = amountRefuned;
+                mollieResponse.AmountRefundedCurrency = response.AmountRefunded.Currency;
+            }
 
             mollieResponse.Resource = response.Resource;
 

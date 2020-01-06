@@ -4,23 +4,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace API.Infrastructure.Data.Migrations
 {
-    public partial class Entities : Migration
+    public partial class MolliePayments : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CampaignType",
+                name: "Campaign",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TypeName = table.Column<string>(nullable: true),
-                    TypeDescription = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true)
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    CampaignName = table.Column<string>(nullable: true),
+                    CampaignDescription = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CampaignType", x => x.Id);
+                    table.PrimaryKey("PK_Campaign", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,11 +45,11 @@ namespace API.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
                     GoalStart = table.Column<DateTime>(nullable: false),
                     GoalEnd = table.Column<DateTime>(nullable: false),
-                    MinAmount = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true)
+                    MinAmount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,19 +57,41 @@ namespace API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "MollieResponse",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProductName = table.Column<string>(nullable: true),
-                    ProductDescription = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true)
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    AmountRemaining = table.Column<decimal>(nullable: false),
+                    AmountRemainingCurrency = table.Column<string>(nullable: true),
+                    RedirectUrl = table.Column<string>(nullable: true),
+                    WebhookUrl = table.Column<string>(nullable: true),
+                    Locale = table.Column<string>(nullable: true),
+                    CountryCode = table.Column<string>(nullable: true),
+                    SubscriptionId = table.Column<string>(nullable: true),
+                    OrderId = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    AmountCaptured = table.Column<decimal>(nullable: false),
+                    AmountCapturedCurrency = table.Column<string>(nullable: true),
+                    AmountRefunded = table.Column<decimal>(nullable: false),
+                    AmountRefundedCurrency = table.Column<string>(nullable: true),
+                    Resource = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: true),
+                    IsCancelable = table.Column<bool>(nullable: false),
+                    PaidAt = table.Column<DateTime>(nullable: true),
+                    CanceledAt = table.Column<DateTime>(nullable: true),
+                    ExpiresAt = table.Column<DateTime>(nullable: true),
+                    ExpiredAt = table.Column<DateTime>(nullable: true),
+                    FailedAt = table.Column<DateTime>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: false),
+                    AmountCurrency = table.Column<string>(nullable: true),
+                    AuthorizedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_MollieResponse", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,9 +133,8 @@ namespace API.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Username = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -121,83 +143,31 @@ namespace API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Campaign",
+                name: "CampaignGoal",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CampaignName = table.Column<string>(nullable: true),
-                    CampaignDescription = table.Column<string>(nullable: true),
-                    CampaignType = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    CampaignTypeNavigationId = table.Column<int>(nullable: true)
+                    CampaignFk = table.Column<int>(nullable: true),
+                    GoalFk = table.Column<int>(nullable: true),
+                    CampaignFkNavigationId = table.Column<int>(nullable: true),
+                    GoalFkNavigationId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Campaign", x => x.Id);
+                    table.PrimaryKey("PK_CampaignGoal", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Campaign_CampaignType_CampaignTypeNavigationId",
-                        column: x => x.CampaignTypeNavigationId,
-                        principalTable: "CampaignType",
+                        name: "FK_CampaignGoal_Campaign_CampaignFkNavigationId",
+                        column: x => x.CampaignFkNavigationId,
+                        principalTable: "Campaign",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductGoal",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProductFk = table.Column<int>(nullable: true),
-                    GoalFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    GoalFkNavigationId = table.Column<int>(nullable: true),
-                    ProductFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductGoal", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductGoal_Goal_GoalFkNavigationId",
+                        name: "FK_CampaignGoal_Goal_GoalFkNavigationId",
                         column: x => x.GoalFkNavigationId,
                         principalTable: "Goal",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductGoal_Product_ProductFkNavigationId",
-                        column: x => x.ProductFkNavigationId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductType",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProductFk = table.Column<int>(nullable: true),
-                    ProductTypeFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    ProductFkNavigationId = table.Column<int>(nullable: true),
-                    ProductTypeFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductType", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductType_Product_ProductFkNavigationId",
-                        column: x => x.ProductFkNavigationId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductType_ProductType_ProductTypeFkNavigationId",
-                        column: x => x.ProductTypeFkNavigationId,
-                        principalTable: "ProductType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -232,122 +202,6 @@ namespace API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserComment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserFk = table.Column<int>(nullable: true),
-                    CommentFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    CommentFkNavigationId = table.Column<int>(nullable: true),
-                    UserFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserComment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserComment_Comment_CommentFkNavigationId",
-                        column: x => x.CommentFkNavigationId,
-                        principalTable: "Comment",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserComment_Users_UserFkNavigationId",
-                        column: x => x.UserFkNavigationId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserProduct",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserFk = table.Column<int>(nullable: true),
-                    ProductFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    ProductFkNavigationId = table.Column<int>(nullable: true),
-                    UserFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserProduct", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserProduct_Product_ProductFkNavigationId",
-                        column: x => x.ProductFkNavigationId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserProduct_Users_UserFkNavigationId",
-                        column: x => x.UserFkNavigationId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserTeam",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserFk = table.Column<int>(nullable: true),
-                    TeamFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    TeamFkNavigationId = table.Column<int>(nullable: true),
-                    UserFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTeam", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserTeam_Team_TeamFkNavigationId",
-                        column: x => x.TeamFkNavigationId,
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserTeam_Users_UserFkNavigationId",
-                        column: x => x.UserFkNavigationId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CampaignsGoal",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CampaignFk = table.Column<int>(nullable: true),
-                    GoalFk = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
-                    CampaignFkNavigationId = table.Column<int>(nullable: true),
-                    GoalFkNavigationId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CampaignsGoal", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CampaignsGoal_Campaign_CampaignFkNavigationId",
-                        column: x => x.CampaignFkNavigationId,
-                        principalTable: "Campaign",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CampaignsGoal_Goal_GoalFkNavigationId",
-                        column: x => x.GoalFkNavigationId,
-                        principalTable: "Goal",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TeamCampaign",
                 columns: table => new
                 {
@@ -377,6 +231,50 @@ namespace API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MolliePayment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<int>(nullable: true),
+                    GoalId = table.Column<int>(nullable: true),
+                    SubGoalId = table.Column<int>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    ResponseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MolliePayment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MolliePayment_Goal_GoalId",
+                        column: x => x.GoalId,
+                        principalTable: "Goal",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MolliePayment_MollieResponse_ResponseId",
+                        column: x => x.ResponseId,
+                        principalTable: "MollieResponse",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MolliePayment_Subgoal_SubGoalId",
+                        column: x => x.SubGoalId,
+                        principalTable: "Subgoal",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MolliePayment_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserCampaign",
                 columns: table => new
                 {
@@ -399,6 +297,35 @@ namespace API.Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserCampaign_Users_UserFkNavigationId",
+                        column: x => x.UserFkNavigationId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserComment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserFk = table.Column<int>(nullable: true),
+                    CommentFk = table.Column<int>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CommentFkNavigationId = table.Column<int>(nullable: true),
+                    UserFkNavigationId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserComment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserComment_Comment_CommentFkNavigationId",
+                        column: x => x.CommentFkNavigationId,
+                        principalTable: "Comment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserComment_Users_UserFkNavigationId",
                         column: x => x.UserFkNavigationId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -434,19 +361,43 @@ namespace API.Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Campaign_CampaignTypeNavigationId",
-                table: "Campaign",
-                column: "CampaignTypeNavigationId");
+            migrationBuilder.CreateTable(
+                name: "UserTeam",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserFk = table.Column<int>(nullable: true),
+                    TeamFk = table.Column<int>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    TeamFkNavigationId = table.Column<int>(nullable: true),
+                    UserFkNavigationId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTeam", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserTeam_Team_TeamFkNavigationId",
+                        column: x => x.TeamFkNavigationId,
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserTeam_Users_UserFkNavigationId",
+                        column: x => x.UserFkNavigationId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CampaignsGoal_CampaignFkNavigationId",
-                table: "CampaignsGoal",
+                name: "IX_CampaignGoal_CampaignFkNavigationId",
+                table: "CampaignGoal",
                 column: "CampaignFkNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CampaignsGoal_GoalFkNavigationId",
-                table: "CampaignsGoal",
+                name: "IX_CampaignGoal_GoalFkNavigationId",
+                table: "CampaignGoal",
                 column: "GoalFkNavigationId");
 
             migrationBuilder.CreateIndex(
@@ -460,24 +411,24 @@ namespace API.Infrastructure.Data.Migrations
                 column: "SubGoalFkNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductGoal_GoalFkNavigationId",
-                table: "ProductGoal",
-                column: "GoalFkNavigationId");
+                name: "IX_MolliePayment_GoalId",
+                table: "MolliePayment",
+                column: "GoalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductGoal_ProductFkNavigationId",
-                table: "ProductGoal",
-                column: "ProductFkNavigationId");
+                name: "IX_MolliePayment_ResponseId",
+                table: "MolliePayment",
+                column: "ResponseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductType_ProductFkNavigationId",
-                table: "ProductType",
-                column: "ProductFkNavigationId");
+                name: "IX_MolliePayment_SubGoalId",
+                table: "MolliePayment",
+                column: "SubGoalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductType_ProductTypeFkNavigationId",
-                table: "ProductType",
-                column: "ProductTypeFkNavigationId");
+                name: "IX_MolliePayment_UserId",
+                table: "MolliePayment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamCampaign_CampaignFkNavigationId",
@@ -520,16 +471,6 @@ namespace API.Infrastructure.Data.Migrations
                 column: "UserFkNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProduct_ProductFkNavigationId",
-                table: "UserProduct",
-                column: "ProductFkNavigationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserProduct_UserFkNavigationId",
-                table: "UserProduct",
-                column: "UserFkNavigationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserTeam_TeamFkNavigationId",
                 table: "UserTeam",
                 column: "TeamFkNavigationId");
@@ -543,16 +484,13 @@ namespace API.Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CampaignsGoal");
+                name: "CampaignGoal");
 
             migrationBuilder.DropTable(
                 name: "GoalSubGoal");
 
             migrationBuilder.DropTable(
-                name: "ProductGoal");
-
-            migrationBuilder.DropTable(
-                name: "ProductType");
+                name: "MolliePayment");
 
             migrationBuilder.DropTable(
                 name: "TeamCampaign");
@@ -567,16 +505,16 @@ namespace API.Infrastructure.Data.Migrations
                 name: "UserLikes");
 
             migrationBuilder.DropTable(
-                name: "UserProduct");
-
-            migrationBuilder.DropTable(
                 name: "UserTeam");
 
             migrationBuilder.DropTable(
-                name: "Subgoal");
+                name: "Goal");
 
             migrationBuilder.DropTable(
-                name: "Goal");
+                name: "MollieResponse");
+
+            migrationBuilder.DropTable(
+                name: "Subgoal");
 
             migrationBuilder.DropTable(
                 name: "Comment");
@@ -585,16 +523,10 @@ namespace API.Infrastructure.Data.Migrations
                 name: "Campaign");
 
             migrationBuilder.DropTable(
-                name: "Product");
-
-            migrationBuilder.DropTable(
                 name: "Team");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "CampaignType");
         }
     }
 }

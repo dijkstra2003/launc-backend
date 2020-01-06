@@ -17,9 +17,10 @@ namespace API.Web.Controllers
         private readonly IGoalService _goalService;
         private readonly IMapper _mapper;
 
-        public PaymentController(IPaymentService paymentService, IMapper mapper)
+        public PaymentController(IPaymentService paymentService, IGoalService goalService, IMapper mapper)
         {
             _paymentService = paymentService;
+            _goalService = goalService;
             _mapper = mapper;
         }
 
@@ -31,14 +32,14 @@ namespace API.Web.Controllers
             var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
             var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
-            var payment = await _paymentService.CreatePayment(
+            var payment = (MolliePayment) await _paymentService.CreatePayment(
                 paymentDto.Amount,
                 goal,
                 subgoal,
                 PaymentMethod.IDEAL
             );
 
-            return Ok(new PaymentResponse { Url = "" });
+            return Ok(new PaymentResponse { Url = payment.Response.RedirectUrl });
         }
 
         [Route("paypal")]
