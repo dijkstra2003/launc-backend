@@ -64,7 +64,8 @@ namespace API.Web.Controllers
         [Route("webhook")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ProcessWebhook([FromBody] PaymentWebhook paymentWebhook) {
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<IActionResult> ProcessWebhook([FromForm] PaymentWebhook paymentWebhook) {
 
             await ((MolliePaymentService) _paymentService).UpdatePaymentStatus(paymentWebhook.Id);
 
