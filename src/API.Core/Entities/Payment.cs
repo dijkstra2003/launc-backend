@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mollie.Api.Models.Payment.Response;
 
 namespace API.Core.Entities
@@ -32,6 +33,8 @@ namespace API.Core.Entities
         public string AmountRemainingCurrency { get; set; }
         public string RedirectUrl { get; set; }
         public string WebhookUrl { get; set; }
+        [NotMapped]
+        public string CheckoutUrl { get; set; }
         public string Locale { get; set; }
         public string CountryCode { get; set; }
         public string SubscriptionId { get; set; }
@@ -89,6 +92,13 @@ namespace API.Core.Entities
 
             mollieResponse.Amount = Decimal.Parse(response.Amount.Value);
             mollieResponse.AmountCurrency = response.Amount.Currency;
+
+            if (
+                response.Links != null &&
+                response.Links.Checkout != null
+            ) {
+                mollieResponse.CheckoutUrl = response.Links.Checkout.Href;
+            }
 
             mollieResponse.CreatedAt = response.CreatedAt;
             mollieResponse.PaidAt = response.PaidAt;

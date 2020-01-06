@@ -103,6 +103,10 @@ namespace API.Web.Services
             return await _client.CreatePaymentAsync(paymentRequest);
         }
 
+        public async Task UpdatePaymentStatus(string paymentId) {
+
+        }
+
         private Mollie.Api.Models.Payment.PaymentMethod PaymentMethodToMolliePaymentMethod(PaymentMethod method) {
             switch (method) {
                 case PaymentMethod.IDEAL:

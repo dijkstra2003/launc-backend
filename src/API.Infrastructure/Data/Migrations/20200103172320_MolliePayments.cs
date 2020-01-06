@@ -163,13 +163,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.CampaignFkNavigationId,
                         principalTable: "Campaign",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_CampaignGoal_Goal_GoalFkNavigationId",
                         column: x => x.GoalFkNavigationId,
                         principalTable: "Goal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,13 +192,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.GoalFkNavigationId,
                         principalTable: "Goal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_GoalSubGoal_Subgoal_SubGoalFkNavigationId",
                         column: x => x.SubGoalFkNavigationId,
                         principalTable: "Subgoal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,13 +221,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.CampaignFkNavigationId,
                         principalTable: "Campaign",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_TeamCampaign_Team_TeamFkNavigationId",
                         column: x => x.TeamFkNavigationId,
                         principalTable: "Team",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,25 +253,25 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.GoalId,
                         principalTable: "Goal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MolliePayment_MollieResponse_ResponseId",
                         column: x => x.ResponseId,
                         principalTable: "MollieResponse",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MolliePayment_Subgoal_SubGoalId",
                         column: x => x.SubGoalId,
                         principalTable: "Subgoal",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MolliePayment_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,13 +294,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.CampaignFkNavigationId,
                         principalTable: "Campaign",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_UserCampaign_Users_UserFkNavigationId",
                         column: x => x.UserFkNavigationId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,13 +323,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.CommentFkNavigationId,
                         principalTable: "Comment",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_UserComment_Users_UserFkNavigationId",
                         column: x => x.UserFkNavigationId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -352,13 +352,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.CampaignFkNavigationId,
                         principalTable: "Campaign",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_UserLikes_Users_UserFkNavigationId",
                         column: x => x.UserFkNavigationId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -381,13 +381,13 @@ namespace API.Infrastructure.Data.Migrations
                         column: x => x.TeamFkNavigationId,
                         principalTable: "Team",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_UserTeam_Users_UserFkNavigationId",
                         column: x => x.UserFkNavigationId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
