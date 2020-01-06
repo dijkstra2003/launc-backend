@@ -28,7 +28,7 @@ namespace API.Core.Entities
     }
 
     public class MollieResponse : BaseEntity {
-
+        public string MollieId { get; set; }
         public decimal AmountRemaining { get; set; }
         public string AmountRemainingCurrency { get; set; }
         public string RedirectUrl { get; set; }
@@ -59,6 +59,8 @@ namespace API.Core.Entities
         public static MollieResponse FromMolliePaymentResponse(PaymentResponse response) {
             
             var mollieResponse = new MollieResponse();
+
+            mollieResponse.MollieId = response.Id;
 
             if (response.AmountRemaining != null && Decimal.TryParse(response.AmountRemaining.Value, out decimal amountRemaining)) {
                 mollieResponse.AmountRemaining = amountRemaining;
