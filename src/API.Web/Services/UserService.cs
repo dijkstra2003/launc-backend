@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Core.Entities;
 using API.Infrastructure.Data;
@@ -17,6 +18,10 @@ namespace API.Web.Services
         Task<EntityEntry<User>> RegisterAsync(string email, string password, string name);
         List<User> GetAll();
         Task<List<User>> GetAllAsync();
+        User Find(int id);
+        Task<User> FindAsync(int id);
+        User FindByIdentity(ClaimsIdentity identity);
+        Task<User> FindByIdentityAsync(ClaimsIdentity identity);
         bool EmailIsUnique(string email);
     }
 
@@ -80,6 +85,31 @@ namespace API.Web.Services
         public Task<List<User>> GetAllAsync()
         {
             return _ctx.Users.ToListAsync();
+        }
+
+        public User Find(int id)
+        {
+            return _ctx.Users.Find(id);
+        }
+
+        public async Task<User> FindAsync(int id)
+        {
+            return await _ctx.Users.FindAsync(id);
+        }
+
+        public User FindByIdentity(ClaimsIdentity identity)
+        {
+            return Find(GetIdFromIdentity(identity));
+        }
+
+        public Task<User> FindByIdentityAsync(ClaimsIdentity identity)
+        {
+            return FindAsync(GetIdFromIdentity(identity));
+        }
+
+        private int GetIdFromIdentity(ClaimsIdentity identity)
+        {
+            return int.Parse(identity.FindFirst(ClaimTypes.Name).Value);
         }
 
         public bool EmailIsUnique(string email)

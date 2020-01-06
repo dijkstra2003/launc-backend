@@ -49,9 +49,10 @@ public class MolliePaymentService : IPaymentService
             return new PaymentClient(MOLLIE_KEY);
         }
 
-        public async Task<Payment> CreatePayment(decimal amount, Goal goal, SubGoal subgoal, PaymentMethod method)
+        public async Task<Payment> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method)
         {
             var payment = new MolliePayment {
+                User = user,
                 Amount = amount,
                 Goal = goal,
             };

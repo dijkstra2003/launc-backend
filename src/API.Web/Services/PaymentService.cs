@@ -11,7 +11,7 @@ namespace API.Web.Services
 
     public interface IPaymentService
     {
-        Task<Payment> CreatePayment(decimal amount, Goal goal, SubGoal subgoal, PaymentMethod method);
+        Task<Payment> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method);
     }
 
 }
