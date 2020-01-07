@@ -21,6 +21,7 @@ namespace API.Web.Controllers
         private readonly IUserService _userService;
         private readonly IMolliePaymentService _paymentService;
         private readonly IGoalService _goalService;
+        private readonly ISubgoalService _subgoalService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
@@ -28,12 +29,14 @@ namespace API.Web.Controllers
             IUserService userService,
             IMolliePaymentService paymentService,
             IGoalService goalService,
+            ISubgoalService subgoalService,
             IMapper mapper,
             ILogger<PaymentController> logger
         ) {
             _userService = userService;
             _paymentService = paymentService;
             _goalService = goalService;
+            _subgoalService = subgoalService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -66,7 +69,7 @@ namespace API.Web.Controllers
         {
             var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
             var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
-            var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
+            var subgoal = await _subgoalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = await _paymentService.CreatePayment(
                 Decimal.Parse(paymentDto.Amount),
@@ -88,7 +91,7 @@ namespace API.Web.Controllers
         {
             var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
             var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
-            var subgoal = await _goalService.GetSubGoalAsync(paymentDto.SubGoalId);
+            var subgoal = await _subgoalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = await _paymentService.CreatePayment(
                 Decimal.Parse(paymentDto.Amount),
@@ -112,6 +115,15 @@ namespace API.Web.Controllers
 
             try {
                 await _paymentService.UpdatePaymentStatus(paymentWebhook.Id);
+
+                var payment = await _paymentService.FetchPaymentByMollieId(paymentWebhook.Id);
+
+                if (payment.Status == Payment.PaymentStatus.PAID)
+                {
+                    await _goalService.UpdateGoalAmountAsync(payment.Goal);
+                    await _subgoalService.UpdateGoalAmountAsync(payment.SubGoal);
+                }
+
             } catch (Exception e) {
                 _logger.LogError(e.Message);
                 return BadRequest();

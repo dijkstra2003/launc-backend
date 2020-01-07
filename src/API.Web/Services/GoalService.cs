@@ -1,7 +1,9 @@
 using API.Core.Entities;
 using API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Web.Services
@@ -16,9 +18,8 @@ namespace API.Web.Services
         
         Goal GetGoal(int id);
         Task<Goal> GetGoalAsync(int id);
-        SubGoal GetSubGoal(int id);
-        Task<SubGoal> GetSubGoalAsync(int id);
-
+        Task UpdateGoalAsync(Goal goal);
+        Task UpdateGoalAmountAsync(Goal goal);
     }
 
     public class GoalService : IGoalService
@@ -59,16 +60,25 @@ namespace API.Web.Services
                 .AsTask();
         }
 
-        public SubGoal GetSubGoal(int id)
+        public async Task UpdateGoalAsync(Goal goal)
         {
-            return _ctx.Subgoal.Find(id);
+            _ctx.Goal.Update(goal);
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task<SubGoal> GetSubGoalAsync(int id)
+        public async Task UpdateGoalAmountAsync(Goal goal)
         {
-            return await _ctx.Subgoal
-                .FindAsync(id)
-                .AsTask();
+            if (goal == null) { return; }
+
+            var sum = await _ctx.MolliePayment
+                .Include(x => x.Goal)
+                .Where(x => x.Goal.Id == goal.Id)
+                .Where(x => x.Status == Payment.PaymentStatus.PAID)
+                .SumAsync(x => x.Amount);
+
+            goal.CurrentAmount = sum;
+
+            await UpdateGoalAsync(goal);
         }
     }
 }

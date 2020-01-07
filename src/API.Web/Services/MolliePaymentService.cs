@@ -21,6 +21,7 @@ namespace API.Web.Services
 {
     public interface IMolliePaymentService : IPaymentService<MolliePayment> {
         Task UpdatePaymentStatus(string paymentId);
+        Task<MolliePayment> FetchPaymentByMollieId(string paymentId);
     }
 
     public class MolliePaymentService : IMolliePaymentService
@@ -100,14 +101,24 @@ namespace API.Web.Services
             await _ctx.SaveChangesAsync();
         }
 
-        private async Task<MolliePayment> FetchPaymentByPaymentId(string paymentId)
+        public async Task<MolliePayment> FetchPayment(int id)
         {
-            var response = await _ctx.MollieResponse
-                .Include(x => x.Payment)
-                .Where(x => x.MollieId == paymentId)
-                .SingleOrDefaultAsync();
-            
-            return response.Payment;
+            return await _ctx.MolliePayment
+                .Include(x => x.Response)
+                .Include(x => x.Goal)
+                .Include(x => x.SubGoal)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();            
+        }
+
+        public async Task<MolliePayment> FetchPaymentByMollieId(string paymentId)
+        {
+            return await _ctx.MolliePayment
+                .Include(x => x.Response)
+                .Include(x => x.Goal)
+                .Include(x => x.SubGoal)
+                .Where(x => x.Response.MollieId == paymentId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<PaymentResponse> FetchMolliePayment(string paymentId)
@@ -132,7 +143,7 @@ namespace API.Web.Services
         }
 
         public async Task UpdatePaymentStatus(string paymentId) {
-            var localPayment = await FetchPaymentByPaymentId(paymentId);
+            var localPayment = await FetchPaymentByMollieId(paymentId);
             var molliePayment = await FetchMolliePayment(paymentId);
 
             try {

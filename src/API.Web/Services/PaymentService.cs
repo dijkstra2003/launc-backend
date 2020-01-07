@@ -13,6 +13,7 @@ namespace API.Web.Services
     public interface IPaymentService<T> where T : Payment
     {
         Task<T> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method);
+        Task<T> FetchPayment(int id);
         Task<List<T>> ListPaymentsFromUser(User user);
         Task<T> ListPaymentFromUser(User user, int id);
     }
