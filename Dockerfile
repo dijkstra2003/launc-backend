@@ -16,6 +16,9 @@ RUN dotnet publish -c Release -o out ./src/API.Web/API.Web.csproj
 
 ENV LAUNC_DB_HOST "localhost"
 ENV LAUNC_DEFAULT_CONNECTION_STRING ""
+ENV MOLLIE_KEY ""
+ENV MOLLIE_REDIRECT_URL ""
+ENV MOLLIE_WEBHOOK_URL ""
 
 RUN chmod +x ./scripts/wait-for-it.sh
 RUN chmod +x ./scripts/local-entrypoint.sh
