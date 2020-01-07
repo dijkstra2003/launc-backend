@@ -38,13 +38,26 @@ namespace API.Web.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public async Task<IActionResult> ListPayments()
         {
             var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
             var payments = await _paymentService.ListPaymentsFromUser(user);
 
             return Ok(_mapper.Map<List<MolliePayment>, List<ListPaymentDto>>(payments));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPayment(int id)
+        {
+            var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
+            var payment = await _paymentService.ListPaymentFromUser(user, id);
+
+            if (payment == null) {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<MolliePayment, ListPaymentDto>(payment));
         }
 
         [Route("ideal")]
@@ -63,7 +76,10 @@ namespace API.Web.Controllers
                 PaymentMethod.IDEAL
             );
 
-            return Ok(new PaymentResponse { Url = payment.Response.CheckoutUrl });
+            return Ok(new PaymentResponse { 
+                PaymentId = payment.Id,
+                Url = payment.Response.CheckoutUrl
+            });
         }
 
         [Route("paypal")]
@@ -82,7 +98,10 @@ namespace API.Web.Controllers
                 PaymentMethod.PAYPAL
             );
 
-            return Ok(new PaymentResponse { Url = payment.Response.CheckoutUrl });
+            return Ok(new PaymentResponse {
+                PaymentId = payment.Id,
+                Url = payment.Response.CheckoutUrl
+            });
         }
 
         [Route("webhook")]

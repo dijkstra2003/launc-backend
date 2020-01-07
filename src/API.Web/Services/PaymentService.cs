@@ -14,6 +14,7 @@ namespace API.Web.Services
     {
         Task<T> CreatePayment(decimal amount, User user, Goal goal, SubGoal subgoal, PaymentMethod method);
         Task<List<T>> ListPaymentsFromUser(User user);
+        Task<T> ListPaymentFromUser(User user, int id);
     }
 
 }

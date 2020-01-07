@@ -84,6 +84,17 @@ namespace API.Web.Services
                 .ToListAsync();
         }
 
+        public async Task<MolliePayment> ListPaymentFromUser(User user, int id)
+        {
+            return await _ctx.MolliePayment
+                .Include(x => x.Response)
+                .Include(x => x.Goal)
+                .Include(x => x.SubGoal)
+                .Where(x => x.User.Id == user.Id)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
         private async Task UpdatePayment(MolliePayment payment) {
             _ctx.MolliePayment.Update(payment);
             await _ctx.SaveChangesAsync();
