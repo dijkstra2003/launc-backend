@@ -118,7 +118,7 @@ namespace API.Web.Controllers
 
                 var payment = await _paymentService.FetchPaymentByMollieId(paymentWebhook.Id);
 
-                if (payment.Status == Payment.PaymentStatus.PAID)
+                if (_paymentService.IsPaid(payment))
                 {
                     await _goalService.UpdateGoalAmountAsync(payment.Goal);
                     await _subgoalService.UpdateGoalAmountAsync(payment.SubGoal);

@@ -156,5 +156,10 @@ namespace API.Web.Services
                 _logger.LogError("Error while updating the payment status: " + e.Message);
             }
         }
+
+        public bool IsPaid(MolliePayment payment)
+        {
+            return payment.Status == Payment.PaymentStatus.PAID;
+        }
     }
 }

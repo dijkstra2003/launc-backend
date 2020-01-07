@@ -16,6 +16,7 @@ namespace API.Web.Services
         Task<T> FetchPayment(int id);
         Task<List<T>> ListPaymentsFromUser(User user);
         Task<T> ListPaymentFromUser(User user, int id);
+        bool IsPaid(T payment);
     }
 
 }
