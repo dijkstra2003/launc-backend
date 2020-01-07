@@ -67,8 +67,18 @@ namespace API.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePaymentIdeal([FromBody] PaymentDto paymentDto)
         {
-            var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
-            var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+            User user;
+            Goal goal;
+
+            try {
+                user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
+                goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+
+            } catch(NullReferenceException ex) {
+                _logger.LogWarning(ex.Message);
+                return NotFound();
+            }
+
             var subgoal = await _subgoalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = await _paymentService.CreatePayment(
@@ -89,8 +99,17 @@ namespace API.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePaymentPaypal([FromBody] PaymentDto paymentDto)
         {
-            var user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
-            var goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+            User user;
+            Goal goal;
+
+            try {
+                user = await _userService.FindByIdentityAsync(this.User.Identity as ClaimsIdentity);
+                goal = await _goalService.GetGoalAsync(paymentDto.GoalId);
+            } catch (NullReferenceException ex) {
+                _logger.LogWarning(ex.Message);
+                return NotFound();
+            }
+
             var subgoal = await _subgoalService.GetSubGoalAsync(paymentDto.SubGoalId);
 
             var payment = await _paymentService.CreatePayment(

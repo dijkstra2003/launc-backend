@@ -50,14 +50,14 @@ namespace API.Web.Services
 
         public Goal GetGoal(int id)
         {
-            return _ctx.Goal.Find(id);
+            return _ctx.Goal.Find(id) ?? throw new NullReferenceException();
         }
 
         public async Task<Goal> GetGoalAsync(int id)
         {
             return await _ctx.Goal
                 .FindAsync(id)
-                .AsTask();
+                .AsTask() ?? throw new NullReferenceException();
         }
 
         public async Task UpdateGoalAsync(Goal goal)

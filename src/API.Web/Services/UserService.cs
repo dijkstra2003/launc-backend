@@ -89,12 +89,12 @@ namespace API.Web.Services
 
         public User Find(int id)
         {
-            return _ctx.Users.Find(id);
+            return _ctx.Users.Find(id) ?? throw new NullReferenceException();
         }
 
         public async Task<User> FindAsync(int id)
         {
-            return await _ctx.Users.FindAsync(id);
+            return await _ctx.Users.FindAsync(id) ?? throw new NullReferenceException();
         }
 
         public User FindByIdentity(ClaimsIdentity identity)
