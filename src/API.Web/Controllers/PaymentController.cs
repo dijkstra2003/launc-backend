@@ -29,7 +29,7 @@ namespace API.Web.Controllers
             IMolliePaymentService paymentService,
             IGoalService goalService,
             IMapper mapper,
-            ILogger logger
+            ILogger<PaymentController> logger
         ) {
             _userService = userService;
             _paymentService = paymentService;

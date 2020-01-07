@@ -70,7 +70,7 @@ namespace API.Infrastructure.Data.Migrations
                 column: "ResponseId",
                 principalTable: "MollieResponse",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.NoAction);
         }
     }
 }
