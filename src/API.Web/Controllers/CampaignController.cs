@@ -70,6 +70,7 @@ namespace API.Web.Controllers
             var _campaign = _campaignService.Create(
                 campaign.CampaignName,
                 campaign.CampaignDescription,
+                campaign.CampaignUrl,
                 goal
             );
 
