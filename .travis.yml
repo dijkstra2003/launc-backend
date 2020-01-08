@@ -23,11 +23,10 @@ before_script:
 script:
   - dotnet test
   - dotnet build-server shutdown
-  - dotnet-sonarscanner begin /k:launc-backend /d:sonar.host.url=http://dev.launc.space:9000 
-    /d:sonar.cs.opencover.reportsPaths=launc-backend.Test/coverage.opencover.xml 
-    /d:sonar.coverage.exclusions=”**Test*.cs”
+  - dotnet-sonarscanner begin /k:"launc-backend" /d:sonar.host.url="http://dev.launc.space:9000" 
+    /d:sonar.login="ba229920bcf1aaefb04019a298d50d6ef82855ca"
   - dotnet build
-  - dotnet-sonarscanner end
+  - dotnet-sonarscanner end /d:sonar.login="ba229920bcf1aaefb04019a298d50d6ef82855ca"
 
 addons:
   ssh_known_hosts:

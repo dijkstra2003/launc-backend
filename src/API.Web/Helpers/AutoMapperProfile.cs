@@ -1,6 +1,8 @@
 using AutoMapper;
 using API.Core.Dtos;
 using API.Core.Entities;
+using System.Collections.Generic;
+using API.Core.Dtos.Mollie;
 
 namespace API.Web.Helpers
 {
@@ -12,6 +14,27 @@ namespace API.Web.Helpers
             CreateMap<UserDto, User>();
             CreateMap<CampaignDto, Campaign>();
             CreateMap<GoalDto, Goal>();
+            CreateMap<Goal, GoalDto>()
+                .ForMember(
+                    dest => dest.CurrentAmount,
+                    opt => opt.MapFrom(src => src.CurrentAmount.ToString())
+                );
+            CreateMap<Campaign, CampaignDto>();
+            CreateMap<MolliePayment, ListPaymentDto>()
+                .ForMember(
+                    dest => dest.GoalId,
+                    opt => opt.MapFrom(src => src.Goal.Id)
+                )
+                .ForMember(
+                    dest => dest.SubGoalId,
+                    opt => opt.MapFrom(src => src.SubGoal.Id)
+                )
+                .ForMember(
+                    dest => dest.Status,
+                    opt => opt.MapFrom(src => src.Status.ToString())
+                );
+
+            
         }
     }
 }

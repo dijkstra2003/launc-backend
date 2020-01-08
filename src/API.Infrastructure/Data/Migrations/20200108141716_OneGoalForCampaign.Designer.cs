@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191212083507_CampaignGoal")]
-    partial class CampaignGoal
+    [Migration("20200108141716_OneGoalForCampaign")]
+    partial class OneGoalForCampaign
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,13 +34,18 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<string>("CampaignName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("GoalId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GoalId");
 
                     b.ToTable("Campaign");
                 });
@@ -58,7 +63,7 @@ namespace API.Infrastructure.Data.Migrations
                     b.Property<int?>("CampaignFkNavigationId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("GoalFk")
@@ -66,6 +71,9 @@ namespace API.Infrastructure.Data.Migrations
 
                     b.Property<int?>("GoalFkNavigationId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -104,8 +112,11 @@ namespace API.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("CreatedOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("CurrentAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("GoalEnd")
                         .HasColumnType("timestamp without time zone");
@@ -155,6 +166,144 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("GoalSubGoal");
                 });
 
+            modelBuilder.Entity("API.Core.Entities.MolliePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("GoalId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SubGoalId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoalId");
+
+                    b.HasIndex("SubGoalId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MolliePayment");
+                });
+
+            modelBuilder.Entity("API.Core.Entities.MollieResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("AmountCaptured")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("AmountCapturedCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AmountCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("AmountRefunded")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("AmountRefundedCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("AmountRemaining")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("AmountRemainingCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("AuthorizedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("CanceledAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ExpiredAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("FailedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsCancelable")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Locale")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MollieId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RedirectUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Resource")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SubscriptionId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("WebhookUrl")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
+
+                    b.ToTable("MollieResponse");
+                });
+
             modelBuilder.Entity("API.Core.Entities.SubGoal", b =>
                 {
                     b.Property<int>("Id")
@@ -164,6 +313,9 @@ namespace API.Infrastructure.Data.Migrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("CurrentAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("GoalEnd")
                         .HasColumnType("timestamp without time zone");
@@ -244,16 +396,13 @@ namespace API.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -385,10 +534,17 @@ namespace API.Infrastructure.Data.Migrations
                     b.ToTable("UserTeam");
                 });
 
+            modelBuilder.Entity("API.Core.Entities.Campaign", b =>
+                {
+                    b.HasOne("API.Core.Entities.Goal", "Goal")
+                        .WithMany()
+                        .HasForeignKey("GoalId");
+                });
+
             modelBuilder.Entity("API.Core.Entities.CampaignGoal", b =>
                 {
                     b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
-                        .WithMany("CampaignGoal")
+                        .WithMany()
                         .HasForeignKey("CampaignFkNavigationId");
 
                     b.HasOne("API.Core.Entities.Goal", "GoalFkNavigation")
@@ -407,10 +563,34 @@ namespace API.Infrastructure.Data.Migrations
                         .HasForeignKey("SubGoalFkNavigationId");
                 });
 
+            modelBuilder.Entity("API.Core.Entities.MolliePayment", b =>
+                {
+                    b.HasOne("API.Core.Entities.Goal", "Goal")
+                        .WithMany()
+                        .HasForeignKey("GoalId");
+
+                    b.HasOne("API.Core.Entities.SubGoal", "SubGoal")
+                        .WithMany()
+                        .HasForeignKey("SubGoalId");
+
+                    b.HasOne("API.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("API.Core.Entities.MollieResponse", b =>
+                {
+                    b.HasOne("API.Core.Entities.MolliePayment", "Payment")
+                        .WithOne("Response")
+                        .HasForeignKey("API.Core.Entities.MollieResponse", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("API.Core.Entities.TeamCampaign", b =>
                 {
                     b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
-                        .WithMany("TeamCampaign")
+                        .WithMany()
                         .HasForeignKey("CampaignFkNavigationId");
 
                     b.HasOne("API.Core.Entities.Team", "TeamFkNavigation")
@@ -421,7 +601,7 @@ namespace API.Infrastructure.Data.Migrations
             modelBuilder.Entity("API.Core.Entities.UserCampaign", b =>
                 {
                     b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
-                        .WithMany("UserCampaign")
+                        .WithMany()
                         .HasForeignKey("CampaignFkNavigationId");
 
                     b.HasOne("API.Core.Entities.User", "UserFkNavigation")
@@ -443,7 +623,7 @@ namespace API.Infrastructure.Data.Migrations
             modelBuilder.Entity("API.Core.Entities.UserLikes", b =>
                 {
                     b.HasOne("API.Core.Entities.Campaign", "CampaignFkNavigation")
-                        .WithMany("UserLikes")
+                        .WithMany()
                         .HasForeignKey("CampaignFkNavigationId");
 
                     b.HasOne("API.Core.Entities.User", "UserFkNavigation")
