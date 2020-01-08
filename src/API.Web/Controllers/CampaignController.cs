@@ -53,7 +53,7 @@ namespace API.Web.Controllers
             var goalEntity = CreateGoal(campaign);
             var campaignEntity = CreateCampaign(campaign, goalEntity);
             
-            return Ok(_mapper.Map<CampaignDto>(campaignEntity));
+            return Ok(_mapper.Map<Campaign, CampaignDto>(campaignEntity));
         }
 
         private Goal CreateGoal(CampaignDto campaign) {
@@ -66,23 +66,15 @@ namespace API.Web.Controllers
             return _goal.Entity;
         }
 
-        private EntityEntry<Campaign> CreateCampaign(CampaignDto campaign, Goal goal) {
+        private Campaign CreateCampaign(CampaignDto campaign, Goal goal) {
             var _campaign = _campaignService.Create(
                 campaign.CampaignName,
                 campaign.CampaignDescription,
                 goal
             );
 
-            return _campaign;
+            return _campaign.Entity;
         }
 
-        private EntityEntry<CampaignGoal> CreateCampaignGoal(int campaignId, int goalId) {
-            var _campaignGoal = _campaignGoalService.Create(
-                campaignId,
-                goalId
-            );
-
-            return _campaignGoal;
-        }
     }
 }
