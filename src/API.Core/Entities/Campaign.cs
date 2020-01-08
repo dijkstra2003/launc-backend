@@ -8,10 +8,6 @@ namespace API.Core.Entities
 
         public string CampaignName { get; set; }
         public string CampaignDescription { get; set; }
-
-        public virtual List<CampaignGoal> CampaignGoal { get; set; }
-        public virtual List<TeamCampaign> TeamCampaign { get; set; }
-        public virtual List<UserCampaign> UserCampaign { get; set; }
-        public virtual List<UserLikes> UserLikes { get; set; }
+        public virtual Goal Goal { get; set; }
     }
 }

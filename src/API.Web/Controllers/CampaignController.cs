@@ -50,27 +50,27 @@ namespace API.Web.Controllers
         [HttpPost]
         public ActionResult CreateCampaignWithGoal([FromBody] CampaignDto campaign)
         {      
-            var _goal = CreateGoal(campaign);
-            var _campaign = CreateCampaign(campaign);
-            var _campaignGoal = CreateCampaignGoal(_campaign.Entity.Id, _goal.Entity.Id);
+            var goalEntity = CreateGoal(campaign);
+            var campaignEntity = CreateCampaign(campaign, goalEntity);
             
-            return Ok(_campaign.Entity);
+            return Ok(_mapper.Map<CampaignDto>(campaignEntity));
         }
 
-        private EntityEntry<Goal> CreateGoal(CampaignDto campaign) {
+        private Goal CreateGoal(CampaignDto campaign) {
             var _goal = _goalService.Create(
                 campaign.Goal.GoalStart,
                 campaign.Goal.GoalEnd,
                 campaign.Goal.MinAmount
             );
 
-            return _goal;
+            return _goal.Entity;
         }
 
-        private EntityEntry<Campaign> CreateCampaign(CampaignDto campaign) {
+        private EntityEntry<Campaign> CreateCampaign(CampaignDto campaign, Goal goal) {
             var _campaign = _campaignService.Create(
                 campaign.CampaignName,
-                campaign.CampaignDescription
+                campaign.CampaignDescription,
+                goal
             );
 
             return _campaign;
