@@ -62,10 +62,12 @@ namespace API.Web
             services.AddScoped<IValueService, ValueService>();
             services.AddScoped<ICampaignService, CampaignService>();
             services.AddScoped<IGoalService, GoalService>();
+            services.AddScoped<ISubgoalService, SubgoalService>();
             services.AddScoped<ICampaignGoalService, CampaignGoalService>();
+            services.AddScoped<IMolliePaymentService, MolliePaymentService>();
+            services.AddScoped<Environment, Environment>();
 
             services.AddDbContext<DataContext>(options => {
-                
                 string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseNpgsql(
                     Environment.EnvironmentValueOrDefault(

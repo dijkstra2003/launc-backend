@@ -22,5 +22,7 @@ namespace API.Infrastructure.Data
         public DbSet<UserComment> UserComment { get; set; }
         public DbSet<UserLikes> UserLikes { get; set; }
         public DbSet<UserTeam> UserTeam { get; set; }
+        public DbSet<MolliePayment> MolliePayment { get; set; }
+        public DbSet<MollieResponse> MollieResponse { get; set; }
     }
 }

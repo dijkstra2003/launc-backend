@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Web.Helpers
 {
@@ -7,7 +8,21 @@ namespace API.Web.Helpers
     {
         public enum EnvVariable {
             [Key("LAUNC_DEFAULT_CONNECTION_STRING")]
-            DefaultConnectionString
+            DefaultConnectionString,
+
+            [Key("MOLLIE_KEY")]
+            MollieKey,
+            [Key("MOLLIE_REDIRECT_URL")]
+            MollieRedirectURL,
+            [Key("MOLLIE_WEBHOOK_URL")]
+            MollieWebhookUrl
+        }
+
+        private readonly IConfiguration _configuration;
+
+        public Environment(IConfiguration configuration)
+        {
+            _configuration = configuration;
         }
 
         private static string EnvironmentKey(EnvVariable env) {
@@ -37,6 +52,23 @@ namespace API.Web.Helpers
 
             return var;
         }
+
+        public string GetEnvOrConfig(string section, string configkey, EnvVariable envVariable)
+        {
+            string configValue = GetConfigValue(section, configkey);
+
+            return Environment.EnvironmentValueOrDefault(
+                envVariable,
+                configValue
+            );
+        }
+
+        private string GetConfigValue(string section, string key) {
+            return _configuration
+                .GetSection("AppSettings")
+                .GetSection(section)[key];
+        }
+
 
         public class Key : Attribute {
             public string key;
