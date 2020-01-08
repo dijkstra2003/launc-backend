@@ -9,7 +9,7 @@ namespace API.Web.Services
 {
     public interface ICampaignService
     {
-        EntityEntry<Campaign> Create(string campaignName, string campaignDescription, Goal goal);
+        EntityEntry<Campaign> Create(string campaignName, string campaignDescription, string campaignUrl, Goal goal);
         Campaign GetCampaignById(int id);
         List<Campaign> GetAll();
     }
@@ -27,11 +27,13 @@ namespace API.Web.Services
         public EntityEntry<Campaign> Create(
             string campaignName, 
             string campaignDescription,
+            string campaignUrl,
             Goal goal
         ) {
             var campaign = _ctx.Campaign.Add(new Campaign {
                 CampaignName = campaignName,
                 CampaignDescription = campaignDescription,
+                CampaignUrl = campaignUrl,
                 Goal = goal
             });
 
