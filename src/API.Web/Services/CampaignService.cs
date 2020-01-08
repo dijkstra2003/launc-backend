@@ -1,5 +1,6 @@
 using API.Core.Entities;
 using API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace API.Web.Services
 {
     public interface ICampaignService
     {
-        EntityEntry<Campaign> Create(string campaignName, string campaignDescription);
+        EntityEntry<Campaign> Create(string campaignName, string campaignDescription, Goal goal);
         Campaign GetCampaignById(int id);
         List<Campaign> GetAll();
     }
@@ -25,11 +26,13 @@ namespace API.Web.Services
 
         public EntityEntry<Campaign> Create(
             string campaignName, 
-            string campaignDescription
+            string campaignDescription,
+            Goal goal
         ) {
             var campaign = _ctx.Campaign.Add(new Campaign {
                 CampaignName = campaignName,
-                CampaignDescription = campaignDescription
+                CampaignDescription = campaignDescription,
+                Goal = goal
             });
 
             _ctx.SaveChanges();
@@ -38,7 +41,10 @@ namespace API.Web.Services
         }
 
         public Campaign GetCampaignById(int id) {
-            return _ctx.Campaign.Find(id);
+            return _ctx.Campaign
+                .Include(x => x.Goal)
+                .Where(x => x.Id == id)
+                .SingleOrDefault();
         }
 
         public List<Campaign> GetAll()

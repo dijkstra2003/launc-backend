@@ -14,6 +14,12 @@ namespace API.Web.Helpers
             CreateMap<UserDto, User>();
             CreateMap<CampaignDto, Campaign>();
             CreateMap<GoalDto, Goal>();
+            CreateMap<Goal, GoalDto>()
+                .ForMember(
+                    dest => dest.CurrentAmount,
+                    opt => opt.MapFrom(src => src.CurrentAmount.ToString())
+                );
+            CreateMap<Campaign, CampaignDto>();
             CreateMap<MolliePayment, ListPaymentDto>()
                 .ForMember(
                     dest => dest.GoalId,
@@ -27,6 +33,8 @@ namespace API.Web.Helpers
                     dest => dest.Status,
                     opt => opt.MapFrom(src => src.Status.ToString())
                 );
+
+            
         }
     }
 }
